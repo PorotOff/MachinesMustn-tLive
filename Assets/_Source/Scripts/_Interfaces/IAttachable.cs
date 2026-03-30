@@ -1,5 +1,8 @@
+using UnityEngine;
+
 public interface IAttachable
 {
-    void Attach();
-    void Detach();
+    public void Attach(IAttachablePoint attachmentPoint);
+    public void Attach(Vector3 position);
+    public void Detach();
 }

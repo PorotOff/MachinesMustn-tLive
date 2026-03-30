@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Cell : MonoBehaviour
+public class Cell : MonoBehaviour, IAttachablePoint
 {
     [SerializeField] private Transform _attachPoint;
 
@@ -11,6 +11,7 @@ public class Cell : MonoBehaviour
     public void Occupy(IAttachable attachable)
     {
         _attachable = attachable;
+        _attachable.Attach(_attachPoint.position);
     }
 
     public void Release()
