@@ -1,80 +1,72 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider2D))]
 [RequireComponent(typeof(Dragger))]
-public class Pillar : MonoBehaviour, IAttachable
+public class Pillar : MonoBehaviour, IPooledObject<Pillar>, IAttachable
 {
-    [SerializeField] private Transform _pivot;
-
+    private Transform _transform;
     private BoxCollider2D _boxCollider;
     private Dragger _dragger;
 
-    private Transform _transform;
-    [SerializeField] private List<Tile> _tiles = new List<Tile>();
-    private BoxColliderCalculator _boxColliderCalculator;
+    private TilesStack _tilesStack;
+    private BoxColliderChanger _boxColliderChanger;
 
     private IAttachablePoint _attachmentPoint;
 
-    // public Tile TopTile => _tiles.Peek();
+    public event Action<Pillar> Released;
 
-    private void Awake()
+    public IReadOnlyTilesStack TilesStack => _tilesStack;
+
+    public void Initialize(List<Tile> tiles)
     {
+        _transform = transform;
         _boxCollider = GetComponent<BoxCollider2D>();
         _dragger = GetComponent<Dragger>();
 
-        _transform = transform;
+        _tilesStack = new TilesStack(tiles);
+        _boxColliderChanger = new BoxColliderChanger(_boxCollider, _transform);
 
         _dragger.Initialize(_transform);
 
-        #region For tests time
-            foreach (var tile in _tiles)
-            {
-                tile.Initialize();
-            }
-            
-            List<Bounds> childBounds = _tiles.Select(tile => tile.BoundsCasher.Bounds).ToList();
-        #endregion
+        _boxColliderChanger.SetScaleAndOffset(_tilesStack.GeneralBounds);
 
-        _boxColliderCalculator = new BoxColliderCalculator(childBounds, _transform);
-        
-        _boxCollider.size = _boxColliderCalculator.CalculateBoxColliderLocalSize();
-        _boxCollider.offset = _boxColliderCalculator.CalculateBoxColliderLocalCenter();
+        _dragger.PuttedDownAboveAttachablePoint += Attach;
+        _dragger.JustPuttedDown += Return;
+        _tilesStack.TilesOver += Detach;  
     }
 
-    private void OnEnable()
+    public void AddTile(Tile tile)
     {
-        _dragger.PuttedDown += Link;
-        _dragger.PickedUp += Unlink;
+        tile.StackTo(_transform, _tilesStack.Peek().AttachPosition);
+        _tilesStack.Add(tile);
     }
 
-    private void OnDisable()
+    public Tile PopTile()
     {
-        _dragger.PuttedDown -= Link;
-        _dragger.PickedUp -= Unlink;
-    }
+        Tile topTile = _tilesStack.Pop();
 
-    public void Link(IAttachablePoint attachmentPoint)
-    {
-        _attachmentPoint = attachmentPoint;
-        _attachmentPoint.Occupy(this);
-    }
-
-    public void Unlink()
-    {
-        _attachmentPoint.Release();
-        _attachmentPoint = null;
+        return topTile;
     }
 
     public void Attach(IAttachablePoint attachmentPoint)
     {
-        attachmentPoint.Occupy(this);
+        if (attachmentPoint.IsFree == false)
+            return;
+
+        _attachmentPoint = attachmentPoint;
+        _attachmentPoint.Occupy(this);
     }
 
     public void Attach(Vector3 position)
     {
         _transform.position = position;
+    }
+
+    public void Return()
+    {
+        _attachmentPoint.Occupy(this);
     }
 
     public void Detach()
@@ -83,5 +75,15 @@ public class Pillar : MonoBehaviour, IAttachable
             return;
 
         _attachmentPoint.Release();
+        _attachmentPoint = null;
+    }
+
+    public void Release()
+    {
+        _dragger.PuttedDownAboveAttachablePoint -= Attach;
+        _dragger.JustPuttedDown -= Return;
+        _tilesStack.TilesOver -= Detach;  
+
+        Released?.Invoke(this);
     }
 }

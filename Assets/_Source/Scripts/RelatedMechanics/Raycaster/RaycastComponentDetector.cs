@@ -21,10 +21,15 @@ public class RaycastComponentDetector<T> where T : class
 
         Vector2 origin = _transform.position;
         Vector2 direction = _transform.forward;        
-        Physics2D.RaycastNonAlloc(origin, direction, _raycastHits, _rayDistance);
-        
-        foreach (var hit in _raycastHits)
+        int hitsCount = Physics2D.RaycastNonAlloc(origin, direction, _raycastHits, _rayDistance);
+
+        for (int i = 0; i < hitsCount; i++)
         {
+            RaycastHit2D hit = _raycastHits[i];
+
+            if (hit.collider == null)
+                continue;
+
             if (hit.collider.TryGetComponent(out component))
                 return true;
         }

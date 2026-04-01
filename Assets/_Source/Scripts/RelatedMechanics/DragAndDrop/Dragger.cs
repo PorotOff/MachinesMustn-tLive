@@ -10,7 +10,8 @@ public class Dragger : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
     private Transform _transform;
 
     public event Action PickedUp;
-    public event Action<IAttachablePoint> PuttedDown;
+    public event Action<IAttachablePoint> PuttedDownAboveAttachablePoint;
+    public event Action JustPuttedDown;
 
     private RaycastComponentDetector<IAttachablePoint> _attachmentPointDetector;
 
@@ -30,7 +31,11 @@ public class Dragger : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
     {
         if (_attachmentPointDetector.TryDetect(out IAttachablePoint attachmentPoint))
         {
-            PuttedDown?.Invoke(attachmentPoint);
+            PuttedDownAboveAttachablePoint?.Invoke(attachmentPoint);
+        }
+        else
+        {
+            JustPuttedDown?.Invoke();
         }
     }
 
