@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoxColliderChanger
+public class BoxColliderTransformer
 {
     private BoxCollider2D _boxCollider;
     private BoxColliderCalculator _boxColliderCalculator;
 
-    public BoxColliderChanger(BoxCollider2D boxCollider, Transform transform)
+    public BoxColliderTransformer(BoxCollider2D boxCollider, Transform transform)
     {
         _boxCollider = boxCollider;
         _boxColliderCalculator = new BoxColliderCalculator(transform);

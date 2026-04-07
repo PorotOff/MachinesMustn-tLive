@@ -9,7 +9,18 @@ public class PillarsFinder
         _cells = cells;
     }
 
-    public bool TryFindSameMonotypicPillar(Pillar basePillar, out Pillar pillar)
+    public bool TryFindMonotypicPillar(int tileConfigID, out Pillar pillar)
+    {
+        Pillar[] cellsPillars = GetPillars();
+        pillar = cellsPillars.FirstOrDefault(cellPillar => cellPillar.TilesStack.IsMonotypic && cellPillar.TilesStack.TopTile.Config.ID == tileConfigID);
+
+        if (pillar == null)
+            return false;
+
+        return true;
+    }
+
+    public bool TryFindMonotypicPillar(Pillar basePillar, out Pillar pillar)
     {
         Pillar[] cellsPillars = GetOtherPillars(basePillar);
         pillar = cellsPillars.FirstOrDefault(cellPillar => cellPillar.TilesStack.IsMonotypic && cellPillar.TilesStack.TopTile.Config.ID == basePillar.TilesStack.TopTile.Config.ID);
@@ -18,6 +29,11 @@ public class PillarsFinder
             return false;
 
         return true;
+    }
+
+    private Pillar[] GetPillars()
+    {
+        return _cells.Where(cell => cell.IsFree == false).Select(cell => cell.Attachable as Pillar).ToArray();
     }
 
     private Pillar[] GetOtherPillars(Pillar basePillar)

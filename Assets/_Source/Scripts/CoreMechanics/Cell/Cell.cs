@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class Cell : MonoBehaviour, IAttachablePoint
+public abstract class Cell : MonoBehaviour, IAttachablePoint
 {
     [SerializeField] private Transform _attachPoint;
 
@@ -10,16 +10,16 @@ public class Cell : MonoBehaviour, IAttachablePoint
 
     public IAttachable Attachable { get; private set; }
     public bool IsFree => Attachable == null;
+    public bool IsEnableCollider => GetIsEnableCollider();
 
     public void Occupy(IAttachable attachable)
     {
-        if (IsFree == false)
+        if (attachable != Attachable && IsFree == false)
             return;
 
         Attachable = attachable;
         Attachable.Attach(_attachPoint.position);
 
-        Debug.Log($"{name}: Attached");
         Attached?.Invoke(attachable);
     }
 
@@ -28,4 +28,6 @@ public class Cell : MonoBehaviour, IAttachablePoint
         Attachable = null;
         Detached?.Invoke();
     }
+
+    protected abstract bool GetIsEnableCollider();
 }

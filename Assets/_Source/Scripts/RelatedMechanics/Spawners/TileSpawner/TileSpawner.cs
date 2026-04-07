@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class TileSpawner : Spawner<Tile>
 {
     public Tile[] Spawn(int count, TileConfig tileConfig)

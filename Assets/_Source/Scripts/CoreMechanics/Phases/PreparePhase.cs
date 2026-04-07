@@ -1,17 +1,22 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class PreparePhase : MonoBehaviour
 {
-    [SerializeField] private PillarsBar _pillarsBar;
     [SerializeField, Min(0)] private int _generalPillarsCount;
+    [SerializeField] private PillarsBar _pillarsBar;
     [SerializeField] private PillarSpawner _pillarSpawner;
     [SerializeField] private List<TileConfig> _tileConfigs;
+
+    private int _remainingPillars;
+
+    public event Action Over;
 
     private void Awake()
     {
         _pillarSpawner.Initialize(_tileConfigs);
+        _remainingPillars = _generalPillarsCount;
     }
 
     private void Start()
@@ -31,10 +36,17 @@ public class PreparePhase : MonoBehaviour
 
     public void SpawnPillars()
     {        
-        if (_pillarsBar.IsEmpty == false)
+        if (_pillarsBar.IsEmpty == false || _remainingPillars == 0)
             return;
 
         Pillar[] pillars = _pillarSpawner.Spawn(_pillarsBar.Capacity);
         _pillarsBar.TakePillars(pillars);
+
+        _remainingPillars -= pillars.Length;
+
+        if (_remainingPillars == 0)
+        {
+            Over?.Invoke();
+        }
     }
 }

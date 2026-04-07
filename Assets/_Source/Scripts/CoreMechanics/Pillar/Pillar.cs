@@ -11,7 +11,7 @@ public class Pillar : MonoBehaviour, IPooledObject<Pillar>, IAttachable
     private Dragger _dragger;
 
     private TilesStack _tilesStack;
-    private BoxColliderChanger _boxColliderChanger;
+    private BoxColliderTransformer _boxColliderTransformer;
 
     private IAttachablePoint _attachmentPoint;
 
@@ -19,22 +19,21 @@ public class Pillar : MonoBehaviour, IPooledObject<Pillar>, IAttachable
 
     public IReadOnlyTilesStack TilesStack => _tilesStack;
 
-    public void Initialize(List<Tile> tiles)
+    private void Awake()
     {
         _transform = transform;
         _boxCollider = GetComponent<BoxCollider2D>();
         _dragger = GetComponent<Dragger>();
+    }
 
+    public void Initialize(List<Tile> tiles)
+    {
         _tilesStack = new TilesStack(tiles);
-        _boxColliderChanger = new BoxColliderChanger(_boxCollider, _transform);
+        _boxColliderTransformer = new BoxColliderTransformer(_boxCollider, _transform);
 
         _dragger.Initialize(_transform);
-
-        _boxColliderChanger.SetScaleAndOffset(_tilesStack.GeneralBounds);
-
-        _dragger.PuttedDownAboveAttachablePoint += Attach;
-        _dragger.JustPuttedDown += Return;
-        _tilesStack.TilesOver += Detach;  
+        _boxColliderTransformer.SetScaleAndOffset(_tilesStack.GeneralBounds);
+        Subscribe();
     }
 
     public void AddTile(Tile tile)
@@ -46,17 +45,22 @@ public class Pillar : MonoBehaviour, IPooledObject<Pillar>, IAttachable
     public Tile PopTile()
     {
         Tile topTile = _tilesStack.Pop();
-
         return topTile;
     }
 
     public void Attach(IAttachablePoint attachmentPoint)
     {
         if (attachmentPoint.IsFree == false)
+        {
+            Return();
             return;
+        }
 
+        Detach();
+
+        attachmentPoint.Occupy(this);
+        _boxCollider.enabled = attachmentPoint.IsEnableCollider;
         _attachmentPoint = attachmentPoint;
-        _attachmentPoint.Occupy(this);
     }
 
     public void Attach(Vector3 position)
@@ -80,10 +84,32 @@ public class Pillar : MonoBehaviour, IPooledObject<Pillar>, IAttachable
 
     public void Release()
     {
-        _dragger.PuttedDownAboveAttachablePoint -= Attach;
-        _dragger.JustPuttedDown -= Return;
-        _tilesStack.TilesOver -= Detach;  
-
+        Detach();
+        Unsubscribe();
         Released?.Invoke(this);
+    }
+
+    private void Subscribe()
+    {
+        _dragger.PuttedDown += OnPuttedDown;
+        _tilesStack.TilesOver += Release;
+    }
+
+    private void Unsubscribe()
+    {
+        _dragger.PuttedDown -= OnPuttedDown;
+        _tilesStack.TilesOver -= Release;
+    }
+
+    private void OnPuttedDown(IAttachablePoint attachablePoint)
+    {
+        if (attachablePoint == null)
+        {
+            Return();
+        }
+        else
+        {
+            Attach(attachablePoint);
+        }
     }
 }

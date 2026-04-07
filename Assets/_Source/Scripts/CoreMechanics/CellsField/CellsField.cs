@@ -32,8 +32,6 @@ public class CellsField : MonoBehaviour
         if (attachable is not Pillar pillar)
             return;
 
-        Debug.Log($"{name}: Shuffle");
-
         _pillarsShuffler.Shuffle(pillar);
     }
 }

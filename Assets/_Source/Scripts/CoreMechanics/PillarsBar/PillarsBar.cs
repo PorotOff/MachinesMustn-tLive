@@ -30,11 +30,6 @@ public class PillarsBar : MonoBehaviour
 
     public void TakePillars(Pillar[] pillars)
     {
-        foreach (var pillar in pillars)
-        {
-            Debug.Log(pillar);
-        }
-
         for (int i = 0; i < Capacity; i++)
         {
             pillars[i].Attach(_spawnCells[i]);

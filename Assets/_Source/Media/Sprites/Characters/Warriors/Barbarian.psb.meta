@@ -35,7 +35,7 @@ ScriptedImporter:
     spriteMeshType: 1
     alignment: 0
     spritePivot: {x: 0.5, y: 0.5}
-    spritePixelsToUnits: 512
+    spritePixelsToUnits: 500
     spriteBorder: {x: 0, y: 0, z: 0, w: 0}
     spriteGenerateFallbackPhysicsShape: 0
     generateCubemap: 6
@@ -94,27 +94,6 @@ ScriptedImporter:
     spritePosition: {x: 0, y: 0}
   mosaicSpriteImportData: []
   rigSpriteImportData:
-  - name: Head
-    originalName: 
-    pivot: {x: 0.5, y: 0.5}
-    alignment: 0
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 4
-      y: 471
-      width: 448
-      height: 463
-    spriteID: b458425f312341a4ab5fac61ba75896a
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 4, y: 471}
-    spritePosition: {x: 273, y: 560}
   - name: Hand
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -126,7 +105,7 @@ ScriptedImporter:
       y: 471
       width: 271
       height: 470
-    spriteID: 0ca206a7235cc6441820768a5d10a537
+    spriteID: 0f4169340aafd4d45821c0df9260ac4f
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -136,27 +115,6 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 749, y: 471}
     spritePosition: {x: 173, y: 156}
-  - name: Band
-    originalName: 
-    pivot: {x: 0.5, y: 0.5}
-    alignment: 0
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 4
-      y: 4
-      width: 456
-      height: 459
-    spriteID: d96fb776730cec047b90631f979dd72f
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 4, y: 4}
-    spritePosition: {x: 280, y: 254}
   - name: "Leg 1 \u043A\u043E\u043F\u0438\u044F"
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -168,7 +126,7 @@ ScriptedImporter:
       y: 4
       width: 253
       height: 238
-    spriteID: 9e0be9d71874d874a9223383998fd521
+    spriteID: 676ec96ee676ed64cac10eab851cef83
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -189,7 +147,7 @@ ScriptedImporter:
       y: 4
       width: 253
       height: 238
-    spriteID: cb94196f8c4343e47a781e2270613c02
+    spriteID: 73c9b2b6ef4929f409abefc28e6cc55e
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -199,6 +157,48 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 729, y: 4}
     spritePosition: {x: 532, y: 2}
+  - name: Head
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 471
+      width: 448
+      height: 463
+    spriteID: 8cc522d1045257944a495eb0a3038183
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 471}
+    spritePosition: {x: 273, y: 560}
+  - name: Band
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 456
+      height: 459
+    spriteID: 1ba9ed48eeda7ca409cf3fed3673eb4c
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 4}
+    spritePosition: {x: 280, y: 254}
   - name: "Hand \u043A\u043E\u043F\u0438\u044F"
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -210,7 +210,7 @@ ScriptedImporter:
       y: 471
       width: 281
       height: 469
-    spriteID: 7a5fec426a028214ab5231538865738a
+    spriteID: 3066682d8a5619247940868ee112c5c1
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -239,7 +239,7 @@ ScriptedImporter:
   - name: DefaultTexturePlatform
     overridden: 0
     ignorePlatformSupport: 0
-    maxTextureSize: 1024
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -292,33 +292,13 @@ ScriptedImporter:
   resliceFromLayer: 0
   mosaicPSDLayers: []
   rigPSDLayers:
-  - name: Head
-    spriteName: Head
-    isGroup: 0
-    parentIndex: -1
-    spriteID: b458425f312341a4ab5fac61ba75896a
-    layerID: 65
-    mosaicPosition: {x: 4, y: 471}
-    flatten: 0
-    isImported: 1
-    isVisible: 1
   - name: Hand
     spriteName: Hand
     isGroup: 0
     parentIndex: -1
-    spriteID: 0ca206a7235cc6441820768a5d10a537
-    layerID: 57
+    spriteID: 0f4169340aafd4d45821c0df9260ac4f
+    layerID: 133
     mosaicPosition: {x: 749, y: 471}
-    flatten: 0
-    isImported: 1
-    isVisible: 1
-  - name: Band
-    spriteName: Band
-    isGroup: 0
-    parentIndex: -1
-    spriteID: d96fb776730cec047b90631f979dd72f
-    layerID: 42
-    mosaicPosition: {x: 4, y: 4}
     flatten: 0
     isImported: 1
     isVisible: 1
@@ -326,8 +306,8 @@ ScriptedImporter:
     spriteName: "Leg 1 \u043A\u043E\u043F\u0438\u044F"
     isGroup: 0
     parentIndex: -1
-    spriteID: 9e0be9d71874d874a9223383998fd521
-    layerID: 28
+    spriteID: 676ec96ee676ed64cac10eab851cef83
+    layerID: 104
     mosaicPosition: {x: 468, y: 4}
     flatten: 0
     isImported: 1
@@ -336,9 +316,29 @@ ScriptedImporter:
     spriteName: Leg 1
     isGroup: 0
     parentIndex: -1
-    spriteID: cb94196f8c4343e47a781e2270613c02
-    layerID: 23
+    spriteID: 73c9b2b6ef4929f409abefc28e6cc55e
+    layerID: 99
     mosaicPosition: {x: 729, y: 4}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Head
+    spriteName: Head
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 8cc522d1045257944a495eb0a3038183
+    layerID: 144
+    mosaicPosition: {x: 4, y: 471}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Band
+    spriteName: Band
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 1ba9ed48eeda7ca409cf3fed3673eb4c
+    layerID: 118
+    mosaicPosition: {x: 4, y: 4}
     flatten: 0
     isImported: 1
     isVisible: 1
@@ -346,8 +346,8 @@ ScriptedImporter:
     spriteName: "Hand \u043A\u043E\u043F\u0438\u044F"
     isGroup: 0
     parentIndex: -1
-    spriteID: 7a5fec426a028214ab5231538865738a
-    layerID: 18
+    spriteID: 3066682d8a5619247940868ee112c5c1
+    layerID: 94
     mosaicPosition: {x: 460, y: 471}
     flatten: 0
     isImported: 1
@@ -355,7 +355,7 @@ ScriptedImporter:
   sharedRigPSDLayers: []
   pSDLayerImportSetting: []
   importFileNodeState: 1
-  platformSettingsDirtyTick: 639106666163852712
+  platformSettingsDirtyTick: 0
   spriteSizeExpandChanged: 0
   generateGOHierarchy: 0
   textureAssetName: 

@@ -10,8 +10,7 @@ public class Dragger : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
     private Transform _transform;
 
     public event Action PickedUp;
-    public event Action<IAttachablePoint> PuttedDownAboveAttachablePoint;
-    public event Action JustPuttedDown;
+    public event Action<IAttachablePoint> PuttedDown;
 
     private RaycastComponentDetector<IAttachablePoint> _attachmentPointDetector;
 
@@ -29,14 +28,13 @@ public class Dragger : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        if (_attachmentPointDetector.TryDetect(out IAttachablePoint attachmentPoint))
+        if (_attachmentPointDetector.TryDetect(out IAttachablePoint attachmentPoint) == false)
         {
-            PuttedDownAboveAttachablePoint?.Invoke(attachmentPoint);
+            PuttedDown?.Invoke(null);
+            return;
         }
-        else
-        {
-            JustPuttedDown?.Invoke();
-        }
+        
+        PuttedDown?.Invoke(attachmentPoint);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -52,5 +50,5 @@ public class Dragger : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
         _transform.position = dragPosition;     
     }
 
-    // todo Прикрутить PID контроллер для плавного следования за курсором.
+    // todo Прикрутить Lerp для плавного следования за курсором.
 }
