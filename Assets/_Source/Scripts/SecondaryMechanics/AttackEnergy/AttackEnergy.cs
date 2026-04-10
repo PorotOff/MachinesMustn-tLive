@@ -8,6 +8,12 @@ public class AttackEnergy : IDisplayableAtBar
         EnergyStripesCount = energyStripesCount;
     }
 
+    // Temp
+    public AttackEnergy(int energyStripeCapacity, int energyStripesCount, int current) : this (energyStripeCapacity, energyStripesCount)
+    {
+        Current = current;
+    }
+
     public event Action Changed;
 
     public int EnergyStripeCapacity { get; private set; }

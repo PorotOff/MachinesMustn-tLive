@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class WarriorCombatUnit : CombatUnit
+public abstract class WarriorCombatUnit : CombatUnit
 {
     [SerializeField] private AttackEnergyDisplayerAtBar _attackEnergyDisplayerAtBar;
 

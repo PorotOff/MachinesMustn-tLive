@@ -1,17 +1,24 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class CombatUnit : MonoBehaviour, IDamageable
 {
-    [SerializeField] private CombatUnitConfig _config;
+    [field: SerializeField] public CombatUnitConfig Config;
     [SerializeField] private HealthDisplayerAtBar _healthDisplayerAtBar;
 
     private Health _health;
     protected AttackEnergy AttackEnergy;
 
+    public event Action AttackComplete;
+    public event Action TakingDamageComplete;
+
+    public IReadOnlyHealth Health => _health;
+
     protected virtual void Awake()
     {
         _health = new Health();
-        AttackEnergy = new AttackEnergy(_config.EnergyStripeCapacity, _config.EnergyStripesCount);
+        AttackEnergy = new AttackEnergy(Config.EnergyStripeCapacity, Config.EnergyStripesCount, 100); // Temp
 
         _healthDisplayerAtBar.Initialize(_health);
     }
@@ -29,10 +36,18 @@ public abstract class CombatUnit : MonoBehaviour, IDamageable
     public void TakeDamage(int damage)
     {
         _health.TakeDamage(damage);
+        InvokeTakingDamageComplete();
     }
 
-    public void Attack(IDamageable damageable)
+    public abstract void Attack(List<IDamageable> damageables);
+
+    protected void InvokeAttackComplete()
     {
-        damageable.TakeDamage(_config.Damage);
+        AttackComplete?.Invoke();
+    }
+
+    protected void InvokeTakingDamageComplete()
+    {
+        TakingDamageComplete?.Invoke();
     }
 }

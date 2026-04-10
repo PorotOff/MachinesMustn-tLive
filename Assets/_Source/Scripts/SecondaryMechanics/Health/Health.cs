@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class Health : IDisplayableAtBar
+public class Health : IDisplayableAtBar, IReadOnlyHealth
 {
     private int _current;
 
