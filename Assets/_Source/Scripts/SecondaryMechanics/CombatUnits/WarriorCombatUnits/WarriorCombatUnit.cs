@@ -2,26 +2,26 @@ using UnityEngine;
 
 public class WarriorCombatUnit : CombatUnit
 {
-    [SerializeField] private AttackEnergyView _attackEnergyView;
+    [SerializeField] private AttackEnergyDisplayerAtBar _attackEnergyDisplayerAtBar;
 
     protected override void Awake()
     {
         base.Awake();
 
-        _attackEnergyView.Initialize(AttackEnergy);
+        _attackEnergyDisplayerAtBar.Initialize(AttackEnergy);
     }
 
     protected override void OnEnable()
     {
         base.OnEnable();
 
-        _attackEnergyView.Subscribe();
+        _attackEnergyDisplayerAtBar.Subscribe();
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
 
-        _attackEnergyView.Unsubscribe();
+        _attackEnergyDisplayerAtBar.Unsubscribe();
     }
 }

@@ -1,9 +1,9 @@
 using System;
 using UnityEngine;
 
-public class Health
+public class Health : IDisplayableAtBar
 {
-    private int _value;
+    private int _current;
 
     public Health()
     {
@@ -14,23 +14,23 @@ public class Health
     public event Action BecameZero;
 
     public int Max => 100;
-    public int Value
+    public int Current
     {
-        get => _value;
+        get => _current;
 
         private set
         {
-            _value = Mathf.Clamp(value, 0, Max);
+            _current = Mathf.Clamp(value, 0, Max);
             Changed?.Invoke();
 
-            if (_value == 0)
+            if (_current == 0)
                 BecameZero?.Invoke();
         }
     }
 
     public void Reset()
     {
-        Value = Max;
+        Current = Max;
     }
 
     public void TakeDamage(int damage)
@@ -38,7 +38,7 @@ public class Health
         if (damage < 0)
             throw new IndexOutOfRangeException(nameof(damage));
 
-        Value -= damage;
+        Current -= damage;
     }
 
     public void TakeHealth(int health)
@@ -46,11 +46,11 @@ public class Health
         if (health < 0)
             throw new IndexOutOfRangeException(nameof(health));
 
-        Value += health;
+        Current += health;
     }
 
     public void Zeroize()
     {
-        Value = 0;
+        Current = 0;
     }
 }
