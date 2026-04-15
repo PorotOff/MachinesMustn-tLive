@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class AutoBattler
 {
@@ -66,12 +67,14 @@ public class AutoBattler
 
         if (IsOpponentsDied())
         {
+            Debug.Log($"Опоненты погибли");
             OpponentsDied?.Invoke();
             return;
         }
 
         if (_attackers.Count == 0)
         {
+            Debug.Log($"Атакователи закончились");
             AttackersOver?.Invoke();
             return;
         }

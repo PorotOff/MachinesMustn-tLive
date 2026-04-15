@@ -49,7 +49,9 @@ public class PhasesService : MonoBehaviour
     private void SetPhase(IPhase phase)
     {
         _currentPhase = phase;
-        Subscribe();        
+        Subscribe();
+
+        Debug.Log($"Установленая фаза {phase.GetType().Name}");  
 
         _currentPhase.Start();
     }

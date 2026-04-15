@@ -22,28 +22,29 @@ public class PreparePhase : IPhase
         _pillarSpawner.Initialize(_tileConfigs);
         _remainingPillars = _generalPillarsCount;
 
-        _pillarsBar.CellDetached += SpawnPillars;
+        _pillarsBar.CellDetached += OnCellDetached;
     }
 
     public void Start()
     {
-        SpawnPillars();
+        OnCellDetached();
     }
 
-    public void SpawnPillars()
+    public void OnCellDetached()
     {        
-        if (_pillarsBar.IsEmpty == false || _remainingPillars == 0)
+        if (_pillarsBar.IsEmpty == false)
             return;
+
+        if (_remainingPillars == 0)
+        {
+            _pillarsBar.CellDetached -= OnCellDetached;
+            Over?.Invoke();
+            return;
+        }
 
         Pillar[] pillars = _pillarSpawner.Spawn(_pillarsBar.Capacity);
         _pillarsBar.TakePillars(pillars);
 
         _remainingPillars -= pillars.Length;
-
-        if (_remainingPillars == 0)
-        {
-            _pillarsBar.CellDetached -= SpawnPillars;
-            Over?.Invoke();
-        }
     }
 }

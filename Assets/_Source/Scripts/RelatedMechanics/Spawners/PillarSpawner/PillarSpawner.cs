@@ -15,6 +15,9 @@ public class PillarSpawner : Spawner<Pillar>
 
     public void Initialize(List<TileConfig> tileConfigs)
     {
+        _tileSpawner.Initialize();
+        Initialize();
+
         #region Preconditions
             if (tileConfigs == null)
                 throw new NullReferenceException(nameof(tileConfigs));

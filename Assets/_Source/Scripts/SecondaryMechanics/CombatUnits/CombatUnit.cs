@@ -6,7 +6,7 @@ public abstract class CombatUnit : MonoBehaviour, IDamageable
 {
     [SerializeField] private HealthDisplayerAtBar _healthDisplayerAtBar;
 
-    [field: SerializeField] public CombatUnitConfig Config { get; }
+    [field: SerializeField] public CombatUnitConfig Config { get; private set; }
 
     private Health _health;
     protected AttackEnergy AttackEnergy;
@@ -41,9 +41,9 @@ public abstract class CombatUnit : MonoBehaviour, IDamageable
         IsBattling = true;
 
         _health.TakeDamage(damage);
-        InvokeTakingDamageComplete();
 
         IsBattling = false;
+        InvokeTakingDamageComplete();
     }
 
     public virtual void Attack(List<CombatUnit> opponents)
@@ -53,9 +53,11 @@ public abstract class CombatUnit : MonoBehaviour, IDamageable
         int randomEnemyIndex = UnityEngine.Random.Range(0, opponents.Count);
         CombatUnit opponent = opponents[randomEnemyIndex];
 
+        opponent.TakeDamage(Config.Damage);
         SpendEnergy(Config.EnergyForAttack);
 
-        IsBattling = true;
+        IsBattling = false;
+        InvokeAttackComplete();
     }
 
     protected void SpendEnergy(int amount)

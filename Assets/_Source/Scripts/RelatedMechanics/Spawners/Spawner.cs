@@ -12,7 +12,7 @@ public class Spawner<T> : MonoBehaviour where T : MonoBehaviour, IPooledObject<T
 
     protected List<T> ActiveObjects = new List<T>();
 
-    private void Awake()
+    public void Initialize()
     {
         _pool = new ObjectPool<T>(OnPoolCreate, OnPoolGet, OnPoolRelease, OnPoolDestroy);
     }

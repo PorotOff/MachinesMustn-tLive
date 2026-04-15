@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public class BattlePhase : IPhase
 {
@@ -9,7 +10,7 @@ public class BattlePhase : IPhase
 
     private AutoBattler _autoBattler;
 
-    private CombatUnit _currentOpponentType;
+    private CombatUnit _currentAttackerType;
 
     public event Action Over;
     public event Action WarriorsDied;
@@ -28,7 +29,7 @@ public class BattlePhase : IPhase
 
     private void StartBattle(List<CombatUnit> attackers, List<CombatUnit> opponents)
     {
-        _currentOpponentType = opponents[0];
+        _currentAttackerType = attackers[0];
 
         List<CombatUnit> sortedAliveAttackers = attackers.Where(attacker => attacker.IsDied == false).OrderByDescending(attacker => attacker.Config.AttackSpeed).ToList();
         Queue<CombatUnit> aliveAttackersQueue = new Queue<CombatUnit>(sortedAliveAttackers);
@@ -52,12 +53,14 @@ public class BattlePhase : IPhase
     {
         Unsubscribe();
 
-        if (_currentOpponentType is WarriorCombatUnit)
+        if (_currentAttackerType is EnemyCombatUnit)
         {
+            Debug.Log($"Враги закончили атаку");
             Over?.Invoke();
             return;
         }
 
+        Debug.Log($"Воины закончили атаку");
         StartBattle(_enemies, _warriors);
     }
 
@@ -65,12 +68,14 @@ public class BattlePhase : IPhase
     {
         Unsubscribe();
 
-        if (_currentOpponentType is WarriorCombatUnit)
+        if (_currentAttackerType is EnemyCombatUnit)
         {
+            Debug.Log($"Воины проиграли");
             WarriorsDied?.Invoke();
         }
         else
         {
+            Debug.Log($"Воины победили");
             EnemiesDied?.Invoke();
         }
     }
