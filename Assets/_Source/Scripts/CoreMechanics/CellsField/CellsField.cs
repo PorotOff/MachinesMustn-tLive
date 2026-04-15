@@ -27,6 +27,14 @@ public class CellsField : MonoBehaviour
         }
     }
 
+    public void Clear()
+    {
+        foreach (var cell in _cells)
+        {
+            cell.Clear();
+        }
+    }
+
     private void Shuffle(IAttachable attachable)
     {
         if (attachable is not Pillar pillar)

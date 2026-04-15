@@ -29,5 +29,15 @@ public abstract class Cell : MonoBehaviour, IAttachablePoint
         Detached?.Invoke();
     }
 
+    public void Clear()
+    {
+        if (Attachable is Pillar pillar)
+        {
+            pillar.Release();
+        }
+
+        Attachable = null;
+    }
+
     protected abstract bool GetIsEnableCollider();
 }

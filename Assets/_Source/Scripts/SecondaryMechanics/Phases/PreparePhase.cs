@@ -10,8 +10,6 @@ public class PreparePhase : IPhase
 
     private int _remainingPillars;
 
-    public event Action Over;
-
     public PreparePhase(int generalPillarsCount, PillarsBar pillarsBar, PillarSpawner pillarSpawner, List<TileConfig> tileConfigs)
     {
         _generalPillarsCount = generalPillarsCount;
@@ -25,7 +23,9 @@ public class PreparePhase : IPhase
         _pillarsBar.CellDetached += OnCellDetached;
     }
 
-    public void Start()
+    public event Action Over;
+
+    public void Enter()
     {
         OnCellDetached();
     }

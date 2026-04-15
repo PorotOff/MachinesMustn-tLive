@@ -2349,6 +2349,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 982d9bd670f95a644a2dbd744d40505e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _cellsField: {fileID: 1532731537}
   _generalPillarsCount: 9
   _pillarsBar: {fileID: 2106217226}
   _pillarSpawner: {fileID: 2062093414}

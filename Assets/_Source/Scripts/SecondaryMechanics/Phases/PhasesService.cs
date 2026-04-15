@@ -5,6 +5,7 @@ using UnityEngine;
 public class PhasesService : MonoBehaviour
 {
     [Header("Prepare phase settings")]
+    [SerializeField] private CellsField _cellsField;
     [SerializeField, Min(0)] private int _generalPillarsCount;
     [SerializeField] private PillarsBar _pillarsBar;
     [SerializeField] private PillarSpawner _pillarSpawner;
@@ -53,7 +54,7 @@ public class PhasesService : MonoBehaviour
 
         Debug.Log($"Установленая фаза {phase.GetType().Name}");  
 
-        _currentPhase.Start();
+        _currentPhase.Enter();
     }
 
     private void OnPhaseOver()
@@ -66,7 +67,7 @@ public class PhasesService : MonoBehaviour
         }
         else
         {
-            SetPhase(new BattlePhase(_warriors, _enemies));
+            SetPhase(new BattlePhase(_cellsField, _warriors, _enemies));
         }
     }
 

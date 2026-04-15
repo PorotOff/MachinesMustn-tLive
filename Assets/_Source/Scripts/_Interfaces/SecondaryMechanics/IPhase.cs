@@ -4,5 +4,5 @@ public interface IPhase
 {
     public event Action Over;
 
-    public void Start();
+    public void Enter();
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class BattlePhase : IPhase
 {
+    private CellsField _cellsField;
     private List<CombatUnit> _warriors;
     private List<CombatUnit> _enemies;
 
@@ -16,14 +17,16 @@ public class BattlePhase : IPhase
     public event Action WarriorsDied;
     public event Action EnemiesDied;    
 
-    public BattlePhase(List<CombatUnit> warriors, List<CombatUnit> enemies)
+    public BattlePhase(CellsField cellsField, List<CombatUnit> warriors, List<CombatUnit> enemies)
     {
+        _cellsField = cellsField;
         _warriors = warriors;
         _enemies = enemies;
     }
 
-    public void Start()
+    public void Enter()
     {
+        _cellsField.Clear();
         StartBattle(_warriors, _enemies);
     }
 
