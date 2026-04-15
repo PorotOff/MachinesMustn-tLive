@@ -1,37 +1,33 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
-public class PreparePhase : MonoBehaviour
+public class PreparePhase : IPhase
 {
-    [SerializeField, Min(0)] private int _generalPillarsCount;
-    [SerializeField] private PillarsBar _pillarsBar;
-    [SerializeField] private PillarSpawner _pillarSpawner;
-    [SerializeField] private List<TileConfig> _tileConfigs;
+    private int _generalPillarsCount;
+    private PillarsBar _pillarsBar;
+    private PillarSpawner _pillarSpawner;
+    private List<TileConfig> _tileConfigs;
 
     private int _remainingPillars;
 
     public event Action Over;
 
-    private void Awake()
+    public PreparePhase(int generalPillarsCount, PillarsBar pillarsBar, PillarSpawner pillarSpawner, List<TileConfig> tileConfigs)
     {
+        _generalPillarsCount = generalPillarsCount;
+        _pillarsBar = pillarsBar;
+        _pillarSpawner = pillarSpawner;
+        _tileConfigs = tileConfigs;
+
         _pillarSpawner.Initialize(_tileConfigs);
         _remainingPillars = _generalPillarsCount;
-    }
 
-    private void Start()
-    {
-        SpawnPillars();
-    }
-
-    private void OnEnable()
-    {
         _pillarsBar.CellDetached += SpawnPillars;
     }
 
-    private void OnDisable()
+    public void Start()
     {
-        _pillarsBar.CellDetached -= SpawnPillars;
+        SpawnPillars();
     }
 
     public void SpawnPillars()
@@ -46,6 +42,7 @@ public class PreparePhase : MonoBehaviour
 
         if (_remainingPillars == 0)
         {
+            _pillarsBar.CellDetached -= SpawnPillars;
             Over?.Invoke();
         }
     }

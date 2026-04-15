@@ -1,63 +1,92 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 
-public class AutoBattler : MonoBehaviour
+public class AutoBattler
 {
     private Queue<CombatUnit> _attackers;
-    private CombatUnit _currentCombatUnit;
+    private List<CombatUnit> _opponents;
+    private CombatUnit _currentAttacker;
 
-    public event Action BattleOver;
+    public event Action AttackersOver;
+    public event Action OpponentsDied;
 
-    public void Initialize(Queue<CombatUnit> attackers)
+    public AutoBattler(Queue<CombatUnit> attackers, List<CombatUnit> opponents)
     {
         _attackers = attackers;
+        _opponents = opponents;
     }
 
-    public void StartBattle(List<CombatUnit> opponents)
+    public void StartBattle()
     {
-        _attackers.Clear();
-        // _attackers.EnqueueRange();
+        Unsubscribe();
+        _currentAttacker = _attackers.Dequeue();
+        Subscribe();
 
-        LaunchAttack();
+        _currentAttacker.Attack(_opponents);
     }
 
-    private void LaunchAttack()
+    public bool IsOpponentsDied()
     {
-        if (_currentCombatUnit != null)
+        foreach (var opponent in _opponents)
         {
-            _currentCombatUnit.TakingDamageComplete -= LaunchAttack;
+            if (opponent.IsDied == false)
+                return false;
+        }
+
+        return true;
+    }
+
+    private void Subscribe()
+    {
+        _currentAttacker.AttackComplete += OnCombatUnitBattleOver;
+
+        foreach (var opponent in _opponents)
+        {
+            opponent.TakingDamageComplete += OnCombatUnitBattleOver;
+        }
+    }
+
+    private void Unsubscribe()
+    {
+        if (_currentAttacker != null)
+        {
+            _currentAttacker.AttackComplete -= OnCombatUnitBattleOver;
+        }
+
+        foreach (var opponent in _opponents)
+        {
+            opponent.TakingDamageComplete -= OnCombatUnitBattleOver;
+        }
+    }
+
+    private void OnCombatUnitBattleOver()
+    {
+        if (IsAnybodyBattling())
+            return;
+
+        if (IsOpponentsDied())
+        {
+            OpponentsDied?.Invoke();
+            return;
         }
 
         if (_attackers.Count == 0)
         {
-            BattleOver?.Invoke();
+            AttackersOver?.Invoke();
             return;
         }
 
-        _currentCombatUnit = _attackers.Dequeue();
-        _currentCombatUnit.TakingDamageComplete += LaunchAttack;
-
-        List<IDamageable> damageables;
-
-        // if (_currentCombatUnit is WarriorCombatUnit warriorCombatUnit)
-        // {
-        //     damageables = _enemies.Select(enemy => enemy as IDamageable).ToList();
-        //     warriorCombatUnit.Attack(damageables);
-        // }
-        // else if (_currentCombatUnit is EnemyCombatUnit enemyCombatUnit)
-        // {
-        //     damageables = _attackers.Select(enemy => enemy as IDamageable).ToList();
-        //     enemyCombatUnit.Attack(damageables);
-        // }
+        StartBattle();
     }
 
-    private bool IsAllDead(List<CombatUnit> combatUnits)
+    private bool IsAnybodyBattling()
     {
-        foreach(var combatUnit in combatUnits)
+        if (_currentAttacker.IsBattling)
+            return true;
+            
+        foreach (var opponent in _opponents)
         {
-            if (combatUnit.Health.Current > 0)
+            if (opponent.IsBattling)
                 return true;
         }
 

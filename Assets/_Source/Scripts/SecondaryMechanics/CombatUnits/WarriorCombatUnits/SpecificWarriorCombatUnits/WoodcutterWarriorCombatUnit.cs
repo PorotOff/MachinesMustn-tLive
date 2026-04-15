@@ -3,11 +3,12 @@ using UnityEngine;
 
 public class WoodcutterWarriorCombatUnit : WarriorCombatUnit
 {
-    public override void Attack(List<IDamageable> damageables)
+    public override void Attack(List<CombatUnit> opponents)
     {
-        int randomEnemyIndex = Random.Range(0, damageables.Count);
-        IDamageable damageable = damageables[randomEnemyIndex];
+        int randomEnemyIndex = Random.Range(0, opponents.Count);
+        CombatUnit opponent = opponents[randomEnemyIndex];
+        opponent.TakingDamageComplete += InvokeAttackComplete;
 
-        damageable.TakeDamage(Config.Damage);
+        opponent.TakeDamage(Config.Damage);
     }
 }

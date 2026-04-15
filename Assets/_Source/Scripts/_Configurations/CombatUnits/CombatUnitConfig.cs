@@ -21,4 +21,5 @@ public class CombatUnitConfig : ScriptableObject
 
     [field: Header("Attack")]
     [field: SerializeField] public int AttackSpeed { get; private set; }
+    [field: SerializeField] public int EnergyForAttack { get; private set; }
 }

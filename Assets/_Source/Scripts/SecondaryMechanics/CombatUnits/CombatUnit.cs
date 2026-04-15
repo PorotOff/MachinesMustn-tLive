@@ -4,8 +4,9 @@ using UnityEngine;
 
 public abstract class CombatUnit : MonoBehaviour, IDamageable
 {
-    [field: SerializeField] public CombatUnitConfig Config;
     [SerializeField] private HealthDisplayerAtBar _healthDisplayerAtBar;
+
+    [field: SerializeField] public CombatUnitConfig Config { get; }
 
     private Health _health;
     protected AttackEnergy AttackEnergy;
@@ -13,7 +14,9 @@ public abstract class CombatUnit : MonoBehaviour, IDamageable
     public event Action AttackComplete;
     public event Action TakingDamageComplete;
 
-    public IReadOnlyHealth Health => _health;
+    // public IReadOnlyHealth Health => _health;
+    public bool IsDied => _health.Current == 0;
+    public bool IsBattling { get; private set; }
 
     protected virtual void Awake()
     {
@@ -35,11 +38,30 @@ public abstract class CombatUnit : MonoBehaviour, IDamageable
 
     public void TakeDamage(int damage)
     {
+        IsBattling = true;
+
         _health.TakeDamage(damage);
         InvokeTakingDamageComplete();
+
+        IsBattling = false;
     }
 
-    public abstract void Attack(List<IDamageable> damageables);
+    public virtual void Attack(List<CombatUnit> opponents)
+    {
+        IsBattling = true;
+
+        int randomEnemyIndex = UnityEngine.Random.Range(0, opponents.Count);
+        CombatUnit opponent = opponents[randomEnemyIndex];
+
+        SpendEnergy(Config.EnergyForAttack);
+
+        IsBattling = true;
+    }
+
+    protected void SpendEnergy(int amount)
+    {
+        AttackEnergy.Remove(amount);
+    }
 
     protected void InvokeAttackComplete()
     {
