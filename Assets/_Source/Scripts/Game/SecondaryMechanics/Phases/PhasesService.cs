@@ -52,8 +52,6 @@ public class PhasesService : MonoBehaviour
         _currentPhase = phase;
         Subscribe();
 
-        Debug.Log($"Установленая фаза {phase.GetType().Name}");  
-
         _currentPhase.Enter();
     }
 
