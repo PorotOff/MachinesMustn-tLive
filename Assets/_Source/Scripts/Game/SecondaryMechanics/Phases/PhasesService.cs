@@ -20,7 +20,7 @@ public class PhasesService : MonoBehaviour
     public event Action WarriorsDied;
     public event Action EnemiesDied;
 
-    private void Awake()
+    public void Initialize()
     {
         SetPhase(new PreparePhase(_cellsField, _generalPillarsCount, _pillarsBar, _pillarSpawner, _tileConfigs));
     }
