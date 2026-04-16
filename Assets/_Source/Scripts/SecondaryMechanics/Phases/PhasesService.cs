@@ -22,7 +22,7 @@ public class PhasesService : MonoBehaviour
 
     private void Awake()
     {
-        SetPhase(new PreparePhase(_generalPillarsCount, _pillarsBar, _pillarSpawner, _tileConfigs));
+        SetPhase(new PreparePhase(_cellsField, _generalPillarsCount, _pillarsBar, _pillarSpawner, _tileConfigs));
     }
 
     private void Subscribe()
@@ -63,11 +63,11 @@ public class PhasesService : MonoBehaviour
         
         if (_currentPhase is BattlePhase)
         {
-            SetPhase(new PreparePhase(_generalPillarsCount, _pillarsBar, _pillarSpawner, _tileConfigs));
+            SetPhase(new PreparePhase(_cellsField, _generalPillarsCount, _pillarsBar, _pillarSpawner, _tileConfigs));
         }
         else
         {
-            SetPhase(new BattlePhase(_cellsField, _warriors, _enemies));
+            SetPhase(new BattlePhase(_warriors, _enemies));
         }
     }
 

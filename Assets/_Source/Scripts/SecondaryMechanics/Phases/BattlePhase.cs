@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class BattlePhase : IPhase
 {
-    private CellsField _cellsField;
     private List<CombatUnit> _warriors;
     private List<CombatUnit> _enemies;
 
@@ -17,16 +16,14 @@ public class BattlePhase : IPhase
     public event Action WarriorsDied;
     public event Action EnemiesDied;    
 
-    public BattlePhase(CellsField cellsField, List<CombatUnit> warriors, List<CombatUnit> enemies)
+    public BattlePhase(List<CombatUnit> warriors, List<CombatUnit> enemies)
     {
-        _cellsField = cellsField;
         _warriors = warriors;
         _enemies = enemies;
     }
 
     public void Enter()
     {
-        _cellsField.Clear();
         StartBattle(_warriors, _enemies);
     }
 
@@ -58,12 +55,10 @@ public class BattlePhase : IPhase
 
         if (_currentAttackerType is EnemyCombatUnit)
         {
-            Debug.Log($"Враги закончили атаку");
             Over?.Invoke();
             return;
         }
-
-        Debug.Log($"Воины закончили атаку");
+        
         StartBattle(_enemies, _warriors);
     }
 
@@ -72,13 +67,11 @@ public class BattlePhase : IPhase
         Unsubscribe();
 
         if (_currentAttackerType is EnemyCombatUnit)
-        {
-            Debug.Log($"Воины проиграли");
+        {            
             WarriorsDied?.Invoke();
         }
         else
         {
-            Debug.Log($"Воины победили");
             EnemiesDied?.Invoke();
         }
     }

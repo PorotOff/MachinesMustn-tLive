@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class CellsField : MonoBehaviour
@@ -5,6 +6,8 @@ public class CellsField : MonoBehaviour
     [SerializeField] private Cell[] _cells;
 
     private PillarsShuffler _pillarsShuffler;
+
+    public event Action CellAttached;
 
     private void Awake()
     {
@@ -15,7 +18,7 @@ public class CellsField : MonoBehaviour
     {
         foreach (var cell in _cells)
         {
-            cell.Attached += Shuffle;
+            cell.Attached += OnCellAttached;
         }
     }
 
@@ -23,7 +26,7 @@ public class CellsField : MonoBehaviour
     {
         foreach (var cell in _cells)
         {
-            cell.Attached -= Shuffle;
+            cell.Attached -= OnCellAttached;
         }
     }
 
@@ -33,6 +36,12 @@ public class CellsField : MonoBehaviour
         {
             cell.Clear();
         }
+    }
+
+    private void OnCellAttached(IAttachable attachable)
+    {
+        Shuffle(attachable);
+        CellAttached?.Invoke();
     }
 
     private void Shuffle(IAttachable attachable)

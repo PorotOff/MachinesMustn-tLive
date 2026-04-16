@@ -16,7 +16,7 @@ public class PillarsBar : MonoBehaviour
     {
         foreach(var cell in _spawnCells)
         {
-            cell.Detached += InvokeDetached;
+            cell.Detached += InvokeCellDetached;
         }
     }
 
@@ -24,7 +24,7 @@ public class PillarsBar : MonoBehaviour
     {
         foreach(var cell in _spawnCells)
         {
-            cell.Detached -= InvokeDetached;
+            cell.Detached -= InvokeCellDetached;
         }
     }
 
@@ -36,7 +36,7 @@ public class PillarsBar : MonoBehaviour
         }
     }
 
-    private void InvokeDetached()
+    private void InvokeCellDetached()
     {
         CellDetached?.Invoke();
     }
