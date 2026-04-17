@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ShelterPage : Page
+public abstract class ShelterPage : Page
 {
     [SerializeField] private Button _back;
 
@@ -17,6 +17,6 @@ public class ShelterPage : Page
 
     private void OpenDailyBonusesPage()
     {
-        PageService.OpenPage<DailyBonusesPage>();
+        PagesService.OpenPage<DailyBonusesPage>();
     }
 }

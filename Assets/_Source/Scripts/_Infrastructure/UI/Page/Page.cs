@@ -2,17 +2,17 @@ using UnityEngine;
 
 public abstract class Page : MonoBehaviour
 {
-    [SerializeField] private CanvasGroup _canvasGroup;
+    [SerializeField] private RectTransform _pageContent;
 
-    [SerializeField] protected PageService PageService;
+    [SerializeField] protected PageService PagesService;
 
     public void Open()
     {
-        _canvasGroup.alpha = 1;
+        _pageContent.gameObject.SetActive(true);
     }
 
     public void Close()
     {
-        _canvasGroup.alpha = 0;
+        _pageContent.gameObject.SetActive(false);
     }
 }

@@ -7,16 +7,16 @@ public class DailyBonusesPage : Page
 
     private void OnEnable()
     {
-        _back.onClick.AddListener(OpenDailyBonusesPage);
+        _back.onClick.AddListener(OpenMainMenuPage);
     }
 
     private void OnDisable()
     {
-        _back.onClick.RemoveListener(OpenDailyBonusesPage);
+        _back.onClick.RemoveListener(OpenMainMenuPage);
     }
 
-    private void OpenDailyBonusesPage()
+    private void OpenMainMenuPage()
     {
-        PageService.OpenPage<DailyBonusesPage>();
+        PagesService.OpenPage<MainMenuPage>();
     }
 }

@@ -17,6 +17,6 @@ public class MainMenuPage : Page
 
     private void OpenDailyBonusesPage()
     {
-        PageService.OpenPage<DailyBonusesPage>();
+        PagesService.OpenPage<DailyBonusesPage>();
     }
 }
