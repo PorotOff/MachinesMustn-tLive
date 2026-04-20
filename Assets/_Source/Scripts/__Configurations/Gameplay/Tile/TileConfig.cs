@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "TileConfig", menuName = "Configurations/Tiles/TileConfig", order = 0)]
+[CreateAssetMenu(fileName = "TileConfig", menuName = "Configurations/Gameplay/Tiles/TileConfig", order = 0)]
 public class TileConfig : ScriptableObject
 {
     [field: SerializeField] public int ID { get; private set; }

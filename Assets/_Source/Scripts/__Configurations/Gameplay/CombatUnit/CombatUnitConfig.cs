@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "CombatUnitConfig", menuName = "Configurations/CombatUnits/CombatUnitConfig", order = 0)]
+[CreateAssetMenu(fileName = "CombatUnitConfig", menuName = "Configurations/Gameplay/CombatUnits/CombatUnitConfig", order = 0)]
 public class CombatUnitConfig : ScriptableObject
 {
     [field: Header("Health")]

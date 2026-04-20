@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class CombatUnit : MonoBehaviour, IDamageable
+public abstract class CombatUnit : MonoBehaviour, IDamageable, IPurchasable
 {
     [SerializeField] private HealthDisplayerAtBar _healthDisplayerAtBar;
 
@@ -21,7 +21,7 @@ public abstract class CombatUnit : MonoBehaviour, IDamageable
     protected virtual void Awake()
     {
         _health = new Health();
-        AttackEnergy = new AttackEnergy(Config.EnergyStripeCapacity, Config.EnergyStripesCount, 100); // Temp
+        AttackEnergy = new AttackEnergy(Config.EnergyStripeCapacity, Config.EnergyStripesCount, 100); // Temp 100
 
         _healthDisplayerAtBar.Initialize(_health);
     }
