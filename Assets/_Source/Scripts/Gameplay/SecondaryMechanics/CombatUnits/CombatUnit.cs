@@ -2,15 +2,17 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class CombatUnit : MonoBehaviour, IDamageable, IPurchasable
+public abstract class CombatUnit : MonoBehaviour, IPooledObject<CombatUnit>, IDamageable, IPurchasable
 {
     [SerializeField] private HealthDisplayerAtBar _healthDisplayerAtBar;
 
     [field: SerializeField] public CombatUnitConfig Config { get; private set; }
 
     private Health _health;
+    
     protected AttackEnergy AttackEnergy;
 
+    public event Action<CombatUnit> Released;
     public event Action AttackComplete;
     public event Action TakingDamageComplete;
 
@@ -34,6 +36,11 @@ public abstract class CombatUnit : MonoBehaviour, IDamageable, IPurchasable
     protected virtual void OnDisable()
     {
         _healthDisplayerAtBar.Unsubscribe();
+    }
+
+    public void Release()
+    {
+        Released?.Invoke(this);
     }
 
     public void TakeDamage(int damage)
