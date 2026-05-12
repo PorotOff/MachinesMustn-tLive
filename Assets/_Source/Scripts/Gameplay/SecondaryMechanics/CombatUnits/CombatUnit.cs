@@ -57,11 +57,11 @@ public abstract class CombatUnit : MonoBehaviour, IPooledObject<CombatUnit>, IDa
     {
         IsBattling = true;
 
-        int randomEnemyIndex = UnityEngine.Random.Range(0, opponents.Count);
-        CombatUnit opponent = opponents[randomEnemyIndex];
+        int randomOpponentIndex = UnityEngine.Random.Range(0, opponents.Count);
+        CombatUnit opponent = opponents[randomOpponentIndex];
 
         opponent.TakeDamage(Config.Damage);
-        SpendEnergy(Config.EnergyForAttack);
+        // SpendEnergy(Config.EnergyForAttack);
 
         IsBattling = false;
         InvokeAttackComplete();

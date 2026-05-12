@@ -23,7 +23,7 @@ public class AutoBattler
         _currentAttacker = _attackers.Dequeue();
         Subscribe();
 
-        _currentAttacker.Attack(_opponents);
+        _currentAttacker.Attack(new List<CombatUnit>(_opponents));
     }
 
     public bool IsOpponentsDied()
