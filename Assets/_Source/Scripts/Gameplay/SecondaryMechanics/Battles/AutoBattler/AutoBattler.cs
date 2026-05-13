@@ -39,11 +39,11 @@ public class AutoBattler
 
     private void Subscribe()
     {
-        _currentAttacker.AttackComplete += OnCombatUnitBattleOver;
+        _currentAttacker.Attacked += OnCombatUnitBattleOver;
 
         foreach (var opponent in _opponents)
         {
-            opponent.TakingDamageComplete += OnCombatUnitBattleOver;
+            opponent.TakedDamage += OnCombatUnitBattleOver;
         }
     }
 
@@ -51,12 +51,12 @@ public class AutoBattler
     {
         if (_currentAttacker != null)
         {
-            _currentAttacker.AttackComplete -= OnCombatUnitBattleOver;
+            _currentAttacker.Attacked -= OnCombatUnitBattleOver;
         }
 
         foreach (var opponent in _opponents)
         {
-            opponent.TakingDamageComplete -= OnCombatUnitBattleOver;
+            opponent.TakedDamage -= OnCombatUnitBattleOver;
         }
     }
 

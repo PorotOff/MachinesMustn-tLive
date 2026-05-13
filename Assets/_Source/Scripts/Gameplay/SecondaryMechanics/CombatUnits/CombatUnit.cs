@@ -4,42 +4,26 @@ using UnityEngine;
 
 public abstract class CombatUnit : MonoBehaviour, IPooledObject<CombatUnit>, IDamageable, IPurchasable
 {
-    [SerializeField] private HealthDisplayerAtBar _healthDisplayerAtBar;
-
-    [field: SerializeField] public CombatUnitConfig Config { get; private set; }
-
-    private Health _health;
-    
+    protected Health Health;
     protected AttackEnergy AttackEnergy;
 
     public event Action<CombatUnit> Released;
-    public event Action AttackComplete;
-    public event Action TakingDamageComplete;
+    public event Action Attacked;
+    public event Action TakedDamage;
 
-    // public IReadOnlyHealth Health => _health;
-    public bool IsDied => _health.Current == 0;
+    public CombatUnitConfig Config { get; private set; }
+    public bool IsDied => Health.Current == 0;
     public bool IsBattling { get; private set; }
 
-    protected virtual void Awake()
+    public void Initialize(CombatUnitConfig Config)
     {
-        _health = new Health();
+        Health = new Health();
         AttackEnergy = new AttackEnergy(Config.EnergyStripeCapacity, Config.EnergyStripesCount, 100); // Temp 100
-
-        _healthDisplayerAtBar.Initialize(_health);
-    }
-
-    protected virtual void OnEnable()
-    {
-        _healthDisplayerAtBar.Subscribe();
-    }
-
-    protected virtual void OnDisable()
-    {
-        _healthDisplayerAtBar.Unsubscribe();
     }
 
     public void Release()
     {
+        Unsubscribe();
         Released?.Invoke(this);
     }
 
@@ -47,10 +31,10 @@ public abstract class CombatUnit : MonoBehaviour, IPooledObject<CombatUnit>, IDa
     {
         IsBattling = true;
 
-        _health.TakeDamage(damage);
+        Health.TakeDamage(damage);
 
         IsBattling = false;
-        InvokeTakingDamageComplete();
+        InvokeTakedDamage();
     }
 
     public virtual void Attack(List<CombatUnit> opponents)
@@ -61,10 +45,10 @@ public abstract class CombatUnit : MonoBehaviour, IPooledObject<CombatUnit>, IDa
         CombatUnit opponent = opponents[randomOpponentIndex];
 
         opponent.TakeDamage(Config.Damage);
-        // SpendEnergy(Config.EnergyForAttack);
+        SpendEnergy(Config.EnergyStripeCapacity);
 
         IsBattling = false;
-        InvokeAttackComplete();
+        InvokeAttacked();
     }
 
     protected void SpendEnergy(int amount)
@@ -72,13 +56,16 @@ public abstract class CombatUnit : MonoBehaviour, IPooledObject<CombatUnit>, IDa
         AttackEnergy.Remove(amount);
     }
 
-    protected void InvokeAttackComplete()
+    protected void InvokeAttacked()
     {
-        AttackComplete?.Invoke();
+        Attacked?.Invoke();
     }
 
-    protected void InvokeTakingDamageComplete()
+    protected void InvokeTakedDamage()
     {
-        TakingDamageComplete?.Invoke();
+        TakedDamage?.Invoke();
     }
+
+    protected abstract void Subscribe();
+    protected abstract void Unsubscribe();
 }

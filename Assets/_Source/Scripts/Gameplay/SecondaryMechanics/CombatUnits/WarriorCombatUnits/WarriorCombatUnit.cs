@@ -1,27 +1,24 @@
-using UnityEngine;
-
 public abstract class WarriorCombatUnit : CombatUnit
 {
-    [SerializeField] private AttackEnergyDisplayerAtBar _attackEnergyDisplayerAtBar;
+    private WarriorCombatUnitView _view;
 
-    protected override void Awake()
+    public void Initialize(WarriorCombatUnitConfig config, WarriorCombatUnitView view)
     {
-        base.Awake();
+        _view = view;
 
-        _attackEnergyDisplayerAtBar.Initialize(AttackEnergy);
+        Initialize(config);
+        _view.Initialize(Health, AttackEnergy);
+
+        Subscribe();
     }
 
-    protected override void OnEnable()
+    protected override void Subscribe()
     {
-        base.OnEnable();
-
-        _attackEnergyDisplayerAtBar.Subscribe();
+        _view.Subscribe();
     }
 
-    protected override void OnDisable()
+    protected override void Unsubscribe()
     {
-        base.OnDisable();
-
-        _attackEnergyDisplayerAtBar.Unsubscribe();
+        _view.Unsubscribe();
     }
 }

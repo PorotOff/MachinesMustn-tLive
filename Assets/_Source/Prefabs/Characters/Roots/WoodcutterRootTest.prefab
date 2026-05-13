@@ -8,6 +8,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 926892444609467954, guid: 4c562c5f3f4a66f4cad6a26bfdf4d144, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1086700320913798649, guid: 4c562c5f3f4a66f4cad6a26bfdf4d144, type: 3}
+      propertyPath: m_MaxValue
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 1559350209268921465, guid: 4c562c5f3f4a66f4cad6a26bfdf4d144, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -72,6 +80,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4535718183997103340, guid: 4c562c5f3f4a66f4cad6a26bfdf4d144, type: 3}
+      propertyPath: m_MaxValue
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 6338180061654830336, guid: 4c562c5f3f4a66f4cad6a26bfdf4d144, type: 3}
       propertyPath: m_Name
       value: WoodcutterRootTest
@@ -98,53 +110,8 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8929905385229743975, guid: 4c562c5f3f4a66f4cad6a26bfdf4d144, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2680440419216982124}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6338180061654830336, guid: 4c562c5f3f4a66f4cad6a26bfdf4d144, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1192477328171533743}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4c562c5f3f4a66f4cad6a26bfdf4d144, type: 3}
---- !u!114 &1270781916516867347 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1913378840752086896, guid: 4c562c5f3f4a66f4cad6a26bfdf4d144, type: 3}
-  m_PrefabInstance: {fileID: 805887599938667107}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe4056c94620e274395ffe408089b40c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1 &6690848967780650851 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6338180061654830336, guid: 4c562c5f3f4a66f4cad6a26bfdf4d144, type: 3}
-  m_PrefabInstance: {fileID: 805887599938667107}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1192477328171533743
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6690848967780650851}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55e4510ef160a8b41900406d64655fba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _healthDisplayerAtBar: {fileID: 1270781916516867347}
-  <Config>k__BackingField: {fileID: 11400000, guid: f371b8fc29b28a049aff8e8fa08228ae, type: 2}
-  _attackEnergyDisplayerAtBar: {fileID: 7175449338083158436}
---- !u!114 &7175449338083158436 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7546704385313516487, guid: 4c562c5f3f4a66f4cad6a26bfdf4d144, type: 3}
-  m_PrefabInstance: {fileID: 805887599938667107}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5f1575db1cc98b4fb595cc8732d8ddf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &8125183267718296836 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8929905385229743975, guid: 4c562c5f3f4a66f4cad6a26bfdf4d144, type: 3}
