@@ -192,6 +192,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6660529870166686083, guid: 9060f0f968539c24f9c5960064297427, type: 3}
+      propertyPath: m_MaxValue
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 6697694001271319848, guid: 9060f0f968539c24f9c5960064297427, type: 3}
       propertyPath: m_Name
       value: HealhtBar
@@ -313,6 +317,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5695900669107518296, guid: dfea369845cde9549ad250be81892a89, type: 3}
+      propertyPath: m_MaxValue
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 5735315361099902963, guid: dfea369845cde9549ad250be81892a89, type: 3}
       propertyPath: m_Name
       value: AttackEnergyBar
@@ -340,6 +348,10 @@ PrefabInstance:
     - target: {fileID: 7231109821923775437, guid: dfea369845cde9549ad250be81892a89, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9017621622995923334, guid: dfea369845cde9549ad250be81892a89, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

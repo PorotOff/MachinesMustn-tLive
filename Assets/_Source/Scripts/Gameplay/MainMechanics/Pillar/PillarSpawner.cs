@@ -36,7 +36,7 @@ public class PillarSpawner : Spawner<Pillar>
 
         for (int i = 0; i < count; i++)
         {
-            int generalTilesCount = UnityEngine.Random.Range(Constants.MinTilesCountAtPillar, Constants.MaxTilesCountAtPillar);
+            int generalTilesCount = UnityEngine.Random.Range(Constants.MinTilesCountAtPillar, Constants.MaxTilesCountAtPillar + 1);
             int finalTileConfigsCount = GetTileConfigsCount(generalTilesCount);
 
             List<TileConfig> tileConfigs = GetRandomTileConfigs(_tileConfigs, finalTileConfigsCount);
@@ -107,7 +107,11 @@ public class PillarSpawner : Spawner<Pillar>
 
         for (int i = 0; i < tileStacksCount; i++)
         {
-            int oneStackTilesCount = UnityEngine.Random.Range(1, remainingTiles + 1);
+            if (remainingTiles == 0)
+                break;
+                
+            bool isLastTileConfig = avaliableTileConfigs.Count == 1;
+            int oneStackTilesCount = isLastTileConfig ? remainingTiles : UnityEngine.Random.Range(1, remainingTiles + 1);
             remainingTiles -= oneStackTilesCount;
 
             TileConfig oneStackTilesConfig = PopRandomTileConfig(avaliableTileConfigs);
