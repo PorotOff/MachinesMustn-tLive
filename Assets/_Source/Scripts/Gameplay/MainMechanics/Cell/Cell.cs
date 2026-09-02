@@ -5,7 +5,7 @@ public abstract class Cell : MonoBehaviour, IAttachablePoint
 {
     [SerializeField] private Transform _attachPoint;
 
-    public event Action<IAttachable> Attached;
+    public event Action<IAttachable> Occupied;
     public event Action Detached;
 
     public IAttachable Attachable { get; private set; }
@@ -20,7 +20,7 @@ public abstract class Cell : MonoBehaviour, IAttachablePoint
         Attachable = attachable;
         Attachable.Attach(_attachPoint.position);
 
-        Attached?.Invoke(attachable);
+        Occupied?.Invoke(attachable);
     }
 
     public void Release()

@@ -3,6 +3,7 @@ using System;
 public interface IReadOnlyTilesStack
 {
     public event Action TilesOver;
+    public event Action TileAdded;
 
     public int Count { get; }
     public Tile TopTile { get; }

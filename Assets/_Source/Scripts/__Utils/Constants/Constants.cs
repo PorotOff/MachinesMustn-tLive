@@ -5,4 +5,6 @@ public static class Constants
 
     public const int MinChance = 1;
     public const int MaxChance = 100;
+
+    public const int MaxThresholdTilesAtPillar = 10;
 }

@@ -36,15 +36,15 @@ public class PreparePhase : IPhase
 
     private void Subscribe()
     {
-        _cellsField.CellAttached += OnCellsFieldAttached;
+        _cellsField.CellOccupied += OnAnyCellOccupied;
     }
 
     private void Unsubscribe()
     {
-        _cellsField.CellAttached -= OnCellsFieldAttached;
+        _cellsField.CellOccupied -= OnAnyCellOccupied;
     }
 
-    private void OnCellsFieldAttached()
+    private void OnAnyCellOccupied()
     {
         _installedPillars++;
 

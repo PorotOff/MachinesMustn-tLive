@@ -13,6 +13,7 @@ public class TilesStack : IReadOnlyTilesStack
     }
 
     public event Action TilesOver;
+    public event Action TileAdded;
 
     public int Count => _tiles.Count;
     public Tile TopTile => _tiles[Count - 1];
@@ -24,6 +25,7 @@ public class TilesStack : IReadOnlyTilesStack
     public void Add(Tile tile)
     {
         _tiles.Add(tile);
+        TileAdded?.Invoke();
     }
 
     public Tile Pop()
