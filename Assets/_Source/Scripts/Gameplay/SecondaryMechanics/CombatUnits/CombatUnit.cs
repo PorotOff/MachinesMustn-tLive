@@ -5,14 +5,13 @@ using UnityEngine;
 public abstract class CombatUnit : MonoBehaviour, IPooledObject<CombatUnit>, IDamageable, IPurchasable
 {
     protected Health Health;
-    protected AttackEnergy AttackEnergy;
 
     public event Action<CombatUnit> Released;
     public event Action Attacked;
     public event Action TakedDamage;
 
     public CombatUnitConfig Config { get; private set; }
-    public IReadOnlyAttackEnergy AttackEnergyRO => AttackEnergy;
+    public AttackEnergy AttackEnergy;
     public bool IsDied => Health.Current == 0;
     public bool IsBattling { get; private set; }
 

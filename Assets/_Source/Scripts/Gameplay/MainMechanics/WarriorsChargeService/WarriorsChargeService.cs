@@ -20,7 +20,7 @@ public class WarriorsChargeService : MonoBehaviour
     {
         foreach (var pillar in _pillars)
         {
-            pillar.TilesStack.TileAdded += ChargeWarrior;
+            pillar.TilesStack.TileAdded += ChargeWarriors;
         }
     }
 
@@ -28,13 +28,18 @@ public class WarriorsChargeService : MonoBehaviour
     {
         foreach (var pillar in _pillars)
         {
-            pillar.TilesStack.TileAdded -= ChargeWarrior;
+            pillar.TilesStack.TileAdded -= ChargeWarriors;
         }
     }
 
-    private void ChargeWarrior()
+    private void ChargeWarriors()
     {
         List<Pillar> fullPillars = _pillars.Where(pillar => pillar.TilesStack.Count >= Constants.MaxThresholdTilesAtPillar).ToList();
+
+        if (fullPillars.Count == 0)
+            return;
+
+        Unsubscribe();
 
         foreach (var fullPillar in fullPillars)
         {
@@ -43,14 +48,13 @@ public class WarriorsChargeService : MonoBehaviour
             if (warrior == null)
                 throw new ArgumentNullException(nameof(warrior));
 
-            // warrior.atta
+            warrior.AttackEnergy.Add(fullPillar.TilesStack.Count);
+            fullPillar.Release();
         }
-
-        Unsubscribe();
-        // Берём количество плиток в столбе, ищем нужного война по конфигу плитки, заряжаем война на это число, удаляем столб
-
-        // todo Добавить конфиг плитки или что-то, что поможет найти нужного война для зарядки
 
         Subscribe();
     }
 }
+
+// todo Протестировать перезарядку воинов
+// todo Начать делать битву врагов и воинов (пока с ручной инициализацией через SF)
