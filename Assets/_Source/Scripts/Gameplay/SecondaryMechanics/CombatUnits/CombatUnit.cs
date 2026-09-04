@@ -12,6 +12,7 @@ public abstract class CombatUnit : MonoBehaviour, IPooledObject<CombatUnit>, IDa
     public event Action TakedDamage;
 
     public CombatUnitConfig Config { get; private set; }
+    public IReadOnlyAttackEnergy AttackEnergyRO => AttackEnergy;
     public bool IsDied => Health.Current == 0;
     public bool IsBattling { get; private set; }
 

@@ -3,6 +3,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "CombatUnitConfig", menuName = "Configurations/Gameplay/CombatUnits/CombatUnitConfig", order = 0)]
 public class CombatUnitConfig : ScriptableObject
 {
+    [field: Header("Data")]
+    [field: SerializeField] public int ID { get; private set; }
+
     [field: Header("Health")]
     [field: SerializeField] public int Health { get; private set; }
     [field: SerializeField] public int MaxHealth { get; private set; }

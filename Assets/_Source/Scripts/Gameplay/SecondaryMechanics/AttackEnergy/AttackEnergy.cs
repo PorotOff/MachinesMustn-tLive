@@ -1,6 +1,6 @@
 using System;
 
-public class AttackEnergy : IDisplayableAtBar
+public class AttackEnergy : IDisplayableAtBar, IReadOnlyAttackEnergy
 {
     public AttackEnergy(int energyStripeCapacity, int energyStripesCount)
     {
