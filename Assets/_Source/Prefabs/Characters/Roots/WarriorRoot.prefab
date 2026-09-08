@@ -85,6 +85,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ViewContainer>k__BackingField: {fileID: 8929905385229743975}
   <HealthDisplayerAtBar>k__BackingField: {fileID: 1913378840752086896}
+  <DisplayersAtBar>k__BackingField:
+  - {fileID: 1913378840752086896}
+  - {fileID: 7546704385313516487}
   <AttackEnergyDisplayerAtBar>k__BackingField: {fileID: 7546704385313516487}
 --- !u!224 &6473382026248684762 stripped
 RectTransform:
@@ -235,6 +238,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1980624251148186449, guid: dfea369845cde9549ad250be81892a89, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2443153114132231184, guid: dfea369845cde9549ad250be81892a89, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2443153114132231184, guid: dfea369845cde9549ad250be81892a89, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2443153114132231184, guid: dfea369845cde9549ad250be81892a89, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2443153114132231184, guid: dfea369845cde9549ad250be81892a89, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2443153114132231184, guid: dfea369845cde9549ad250be81892a89, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2443153114132231184, guid: dfea369845cde9549ad250be81892a89, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2529065122144501148, guid: dfea369845cde9549ad250be81892a89, type: 3}

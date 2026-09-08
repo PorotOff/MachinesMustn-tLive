@@ -4,6 +4,9 @@ using UnityEngine;
 
 public abstract class CombatUnit : MonoBehaviour, IPooledObject<CombatUnit>, IDamageable, IPurchasable
 {
+    // todo Можно реализовать композит тулбар на общей вьюшке
+    private CombatUnitView _view;
+
     protected Health Health;
 
     public event Action<CombatUnit> Released;
@@ -15,10 +18,23 @@ public abstract class CombatUnit : MonoBehaviour, IPooledObject<CombatUnit>, IDa
     public bool IsDied => Health.Current == 0;
     public bool IsBattling { get; private set; }
 
-    public void Initialize(CombatUnitConfig Config)
+    public void Initialize(CombatUnitConfig config, CombatUnitView view)
     {
+        _view = view;
+
         Health = new Health();
-        AttackEnergy = new AttackEnergy(Config.EnergyStripeCapacity, Config.EnergyStripesCount, 100); // Temp 100
+        AttackEnergy = new AttackEnergy(config.EnergyStripeCapacity, config.EnergyStripesCount, config.MaxHealth);
+
+        List<IDisplayableAtBar> displayablesAtBar = new List<IDisplayableAtBar>()
+        {
+            Health,
+            AttackEnergy
+        }; // todo Реализовать композитную схему добавления всякой херни
+        // (здоровья, энергии на юнита), чтобы в последствии просто
+        // добавлять штуки через единую точку без изменения вот этого списка
+
+        _view.Initialize(displayablesAtBar);
+        Subscribe();
     }
 
     public void Release()
@@ -66,6 +82,13 @@ public abstract class CombatUnit : MonoBehaviour, IPooledObject<CombatUnit>, IDa
         TakedDamage?.Invoke();
     }
 
-    protected abstract void Subscribe();
-    protected abstract void Unsubscribe();
+    protected void Subscribe()
+    {
+        _view.Subscribe();
+    }
+
+    protected void Unsubscribe()
+    {
+        _view.Unsubscribe();
+    }
 }

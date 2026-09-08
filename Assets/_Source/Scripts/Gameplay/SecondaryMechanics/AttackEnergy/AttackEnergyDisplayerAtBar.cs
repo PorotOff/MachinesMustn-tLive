@@ -1,7 +1,8 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackEnergyDisplayerAtBar : DisplayerAtBar<AttackEnergy>
+public class AttackEnergyDisplayerAtBar : DisplayerAtBar
 {
     [SerializeField] private List<EnergyStripe> _energyStripes;
 
@@ -9,7 +10,11 @@ public class AttackEnergyDisplayerAtBar : DisplayerAtBar<AttackEnergy>
     {
         base.Display();
         DisableAllEnergyStripes();
-        EnableEnergyStripes(Displayeable.EnergyStripesCount);
+
+        if (Displayable is not AttackEnergy displayableAttackEnergy)
+            throw new InvalidCastException(nameof(Displayable));
+
+        EnableEnergyStripes(displayableAttackEnergy.EnergyStripesCount);
     }
 
     private void DisableAllEnergyStripes()

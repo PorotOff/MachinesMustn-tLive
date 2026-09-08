@@ -19,4 +19,7 @@ public class CombatUnitConfig : ScriptableObject
 
     [field: Header("Attack")]
     [field: SerializeField] public int AttackSpeed { get; private set; }
+
+    [field: Header("View")]
+    [field: SerializeField] public CombatUnitView View { get; private set; }
 }

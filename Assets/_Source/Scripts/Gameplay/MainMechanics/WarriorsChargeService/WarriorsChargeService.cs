@@ -8,15 +8,19 @@ public class WarriorsChargeService : MonoBehaviour
     [SerializeField] private List<WarriorCombatUnit> _warriors; // TEMP: заменить SF на инициализацию
     [SerializeField] private CellsField _cellsField;
 
-    private List<Pillar> _pillars;
+    private List<Pillar> _pillars = new List<Pillar>();
 
-    private void Awake()
+    private void OnEnable()
     {
-        _pillars = _cellsField.GetPillars().ToList();
-        Subscribe();
+        _cellsField.CellOccupied += UpdatePillars;
     }
 
-    private void Subscribe()
+    private void OnDisable()
+    {
+        _cellsField.CellOccupied -= UpdatePillars;
+    }
+
+    private void SubscribeToPillars()
     {
         foreach (var pillar in _pillars)
         {
@@ -24,7 +28,7 @@ public class WarriorsChargeService : MonoBehaviour
         }
     }
 
-    private void Unsubscribe()
+    private void UnsubscribeFromPillars()
     {
         foreach (var pillar in _pillars)
         {
@@ -32,18 +36,29 @@ public class WarriorsChargeService : MonoBehaviour
         }
     }
 
+    private void UpdatePillars()
+    {
+        UnsubscribeFromPillars();
+        _pillars = _cellsField.GetPillars().ToList();
+        SubscribeToPillars();
+    }
+
     private void ChargeWarriors()
     {
         List<Pillar> fullPillars = _pillars.Where(pillar => pillar.TilesStack.Count >= Constants.MaxThresholdTilesAtPillar).ToList();
 
+        // Debug.Log($"Зарядка воинов. Полных столбов: {fullPillars.Count}");
+
         if (fullPillars.Count == 0)
             return;
 
-        Unsubscribe();
+        UnsubscribeFromPillars();
 
         foreach (var fullPillar in fullPillars)
         {
             WarriorCombatUnit warrior = _warriors.FirstOrDefault(warrior => warrior.Config.ID == fullPillar.TilesStack.TopTile.Config.ID);
+
+            // Debug.Log($"Warrior: {warrior.name}");
 
             if (warrior == null)
                 throw new ArgumentNullException(nameof(warrior));
@@ -52,9 +67,9 @@ public class WarriorsChargeService : MonoBehaviour
             fullPillar.Release();
         }
 
-        Subscribe();
+        SubscribeToPillars();
     }
 }
 
-// todo Протестировать перезарядку воинов
+// todo Протестировать перезарядку воинов. ПЕРЕД ЭТИМ ПОДТЯНУТЬ ЛОГИКУ ПОДПИСОК НА НУЖНЫЕ СОБЫТИЯ
 // todo Начать делать битву врагов и воинов (пока с ручной инициализацией через SF)

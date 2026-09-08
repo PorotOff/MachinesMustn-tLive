@@ -46,8 +46,8 @@ public class CellsField : MonoBehaviour
 
     private void OnCellOccupied(IAttachable attachable)
     {
-        Shuffle(attachable);
         CellOccupied?.Invoke();
+        Shuffle(attachable);
     }
 
     private void Shuffle(IAttachable attachable)
