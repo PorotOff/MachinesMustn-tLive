@@ -36,12 +36,12 @@ public class PreparePhase : IPhase
 
     private void Subscribe()
     {
-        _cellsField.CellOccupied += OnAnyCellOccupied;
+        _cellsField.PillarsShuffled += OnAnyCellOccupied;
     }
 
     private void Unsubscribe()
     {
-        _cellsField.CellOccupied -= OnAnyCellOccupied;
+        _cellsField.PillarsShuffled -= OnAnyCellOccupied;
     }
 
     private void OnAnyCellOccupied()

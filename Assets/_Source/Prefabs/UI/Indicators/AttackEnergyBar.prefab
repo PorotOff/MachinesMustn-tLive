@@ -517,7 +517,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 857967666093923256, guid: ee53aaca8f9f48a4687515d73bd58e27, type: 3}
       propertyPath: m_Name
-      value: AttackEnergyBar Variant
+      value: AttackEnergyBar
       objectReference: {fileID: 0}
     - target: {fileID: 4321234331177024200, guid: ee53aaca8f9f48a4687515d73bd58e27, type: 3}
       propertyPath: m_Color.b
@@ -621,48 +621,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7450916071554370007, guid: ee53aaca8f9f48a4687515d73bd58e27, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8274716965371873155}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 857967666093923256, guid: ee53aaca8f9f48a4687515d73bd58e27, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1820223313600040051}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ee53aaca8f9f48a4687515d73bd58e27, type: 3}
 --- !u!224 &2529065122144501148 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7450916071554370007, guid: ee53aaca8f9f48a4687515d73bd58e27, type: 3}
   m_PrefabInstance: {fileID: 4935931881418912843}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4066913447312448072 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8939477994509872643, guid: ee53aaca8f9f48a4687515d73bd58e27, type: 3}
-  m_PrefabInstance: {fileID: 4935931881418912843}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5735315361099902963}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b0bcc0b0e3e7f34480187f4e3ac55dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1 &5735315361099902963 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 857967666093923256, guid: ee53aaca8f9f48a4687515d73bd58e27, type: 3}
-  m_PrefabInstance: {fileID: 4935931881418912843}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1820223313600040051
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5735315361099902963}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5f1575db1cc98b4fb595cc8732d8ddf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _indicator: {fileID: 4066913447312448072}
-  _energyStripes:
-  - {fileID: 4298100270731621118}
-  - {fileID: 1825264388524365587}
-  - {fileID: 2461540064230338199}
-  - {fileID: 233102180054119403}
-  - {fileID: 152405555016121348}

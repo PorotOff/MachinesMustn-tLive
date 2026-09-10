@@ -15,7 +15,7 @@ public class AnimatedBarMinToMaxValueIndicator : BarMinToMaxValueIndicator
         _coroutine = StartCoroutine(UpdateHealth(current));
     }
 
-    private IEnumerator UpdateHealth(float current)
+    private IEnumerator UpdateHealth(float current) // todo Rename To UpdateIndicator
     {
         while (Slider.value != current)
         {

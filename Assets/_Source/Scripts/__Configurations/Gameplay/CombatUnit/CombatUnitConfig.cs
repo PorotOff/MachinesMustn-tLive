@@ -10,7 +10,8 @@ public class CombatUnitConfig : ScriptableObject
     [field: SerializeField] public int Health { get; private set; }
     [field: SerializeField] public int MaxHealth { get; private set; }
 
-    [field: Header("Energy")]
+    [field: Header("Attack energy")]
+    [field: SerializeField] public int AttackEnergy { get; private set; }
     [field: SerializeField] public int EnergyStripeCapacity { get; private set; }
     [field: SerializeField] public int EnergyStripesCount { get; private set; }
 

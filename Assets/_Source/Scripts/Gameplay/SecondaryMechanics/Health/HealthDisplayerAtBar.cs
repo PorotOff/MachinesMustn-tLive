@@ -1,4 +1,4 @@
-public class HealthDisplayerAtBar : DisplayerAtBar
+public class HealthDisplayerAtBar
 {
     
 }

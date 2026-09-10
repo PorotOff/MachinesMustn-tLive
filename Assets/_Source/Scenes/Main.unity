@@ -5006,8 +5006,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ef9bd8ec6a084e409c52fb7178fa9f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _warriors:
-  - {fileID: 2038932509}
   _cellsField: {fileID: 1532731537}
 --- !u!1 &1147091681
 GameObject:
@@ -5595,6 +5593,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0be8182d4326b6146ac1fb0bbafaa988, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _warriorsChargeService: {fileID: 1126315374}
   _combatUnitRootPrefab: {fileID: 9161947696696354279, guid: 4c562c5f3f4a66f4cad6a26bfdf4d144, type: 3}
   _combatUnitConfig: {fileID: 11400000, guid: b58cf1c99918bf745a16353efefaab41, type: 2}
 --- !u!1 &1311025713

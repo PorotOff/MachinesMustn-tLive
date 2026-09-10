@@ -4,25 +4,25 @@ public class WarriorCombatUnitView : CombatUnitView
 
     public void Initialize(HealthDisplayerAtBar healthDisplayerAtBar, AttackEnergyDisplayerAtBar attackEnergyDisplayerAtBar)
     {
-        Initialize(healthDisplayerAtBar);
+        // Initialize(healthDisplayerAtBar);
         _attackEnergyDisplayerAtBar = attackEnergyDisplayerAtBar;
     }
 
     public void Initialize(Health health, AttackEnergy attackEnergy)
     {
-        Initialize(health);
-        _attackEnergyDisplayerAtBar.Initialize(attackEnergy);
+        // Initialize(health);
+        // _attackEnergyDisplayerAtBar.Initialize(attackEnergy);
     }
 
-    public override void Subscribe()
-    {
-        base.Subscribe();
-        _attackEnergyDisplayerAtBar.Subscribe();
-    }
+    // public override void Subscribe()
+    // {
+    //     // base.Subscribe();
+    //     _attackEnergyDisplayerAtBar.Subscribe();
+    // }
 
-    public override void Unsubscribe()
-    {
-        base.Unsubscribe();
-        _attackEnergyDisplayerAtBar.Unsubscribe();
-    }
+    // public override void Unsubscribe()
+    // {
+    //     // base.Unsubscribe();
+    //     _attackEnergyDisplayerAtBar.Unsubscribe();
+    // }
 }

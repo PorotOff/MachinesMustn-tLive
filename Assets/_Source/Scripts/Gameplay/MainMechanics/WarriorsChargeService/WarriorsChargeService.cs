@@ -5,69 +5,47 @@ using UnityEngine;
 
 public class WarriorsChargeService : MonoBehaviour
 {
-    [SerializeField] private List<WarriorCombatUnit> _warriors; // TEMP: заменить SF на инициализацию
     [SerializeField] private CellsField _cellsField;
 
-    private List<Pillar> _pillars = new List<Pillar>();
+    private List<WarriorCombatUnit> _warriors = new List<WarriorCombatUnit>();
 
     private void OnEnable()
     {
-        _cellsField.CellOccupied += UpdatePillars;
+        _cellsField.PillarsShuffled += ChargeWarriors;
     }
 
     private void OnDisable()
     {
-        _cellsField.CellOccupied -= UpdatePillars;
+        _cellsField.PillarsShuffled -= ChargeWarriors;
     }
 
-    private void SubscribeToPillars()
+    public void Initialize(List<WarriorCombatUnit> warriors)
     {
-        foreach (var pillar in _pillars)
-        {
-            pillar.TilesStack.TileAdded += ChargeWarriors;
-        }
-    }
-
-    private void UnsubscribeFromPillars()
-    {
-        foreach (var pillar in _pillars)
-        {
-            pillar.TilesStack.TileAdded -= ChargeWarriors;
-        }
-    }
-
-    private void UpdatePillars()
-    {
-        UnsubscribeFromPillars();
-        _pillars = _cellsField.GetPillars().ToList();
-        SubscribeToPillars();
+        _warriors = warriors;
     }
 
     private void ChargeWarriors()
     {
-        List<Pillar> fullPillars = _pillars.Where(pillar => pillar.TilesStack.Count >= Constants.MaxThresholdTilesAtPillar).ToList();
+        List<Pillar> pillars = _cellsField.GetPillars().ToList();
+        List<Pillar> fullPillars = pillars.Where(pillar => pillar.TilesStack.Count >= Constants.MaxThresholdTilesAtPillar).ToList();
 
         // Debug.Log($"Зарядка воинов. Полных столбов: {fullPillars.Count}");
 
         if (fullPillars.Count == 0)
             return;
 
-        UnsubscribeFromPillars();
-
         foreach (var fullPillar in fullPillars)
         {
-            WarriorCombatUnit warrior = _warriors.FirstOrDefault(warrior => warrior.Config.ID == fullPillar.TilesStack.TopTile.Config.ID);
+            WarriorCombatUnit warriorCombatUnit = _warriors.FirstOrDefault(warrior => warrior.Config.ID == fullPillar.TilesStack.TopTile.Config.ID);
 
             // Debug.Log($"Warrior: {warrior.name}");
 
-            if (warrior == null)
-                throw new ArgumentNullException(nameof(warrior));
+            if (warriorCombatUnit == null)
+                throw new ArgumentNullException(nameof(warriorCombatUnit));
 
-            warrior.AttackEnergy.Add(fullPillar.TilesStack.Count);
+            warriorCombatUnit.AttackEnergy.Add(fullPillar.TilesStack.Count);
             fullPillar.Release();
         }
-
-        SubscribeToPillars();
     }
 }
 

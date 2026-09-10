@@ -1,33 +1,40 @@
 using System;
-using UnityEngine;
 
-public abstract class DisplayerAtBar : MonoBehaviour
+public class DisplayerAtBar
 {
-    [SerializeField] private MinToMaxValueIndicator _indicator;
+    private MinToMaxValueIndicator _indicator;
+    private IDisplayableAtBar _displayable;
 
-    protected IDisplayableAtBar Displayable;
+    public event Action Displayed;
 
-    public Type DisplayableType => Displayable.GetType();
+    public DisplayerAtBar(MinToMaxValueIndicator indicator)
+    {
+        _indicator = indicator;
+    }
 
     public void Initialize(IDisplayableAtBar displayeable)
     {
-        Displayable = displayeable;
-        _indicator.Initialize(0, Displayable.Max, Displayable.Current);
+        _displayable = displayeable;
+        _indicator.Initialize(0, _displayable.Max, _displayable.Current);
         Display();
+
+        _displayable.Changed += Display;
+        // todo Тоже пофиксить подписки
     }
 
     public void Subscribe()
     {
-        Displayable.Changed += Display;
+        
     }
 
     public void Unsubscribe()
     {
-        Displayable.Changed -= Display;
+        _displayable.Changed -= Display;
     }
 
     protected virtual void Display()
     {
-        _indicator.Display(Displayable.Current);
+        _indicator.Display(_displayable.Current);
+        Displayed?.Invoke();
     }
 }

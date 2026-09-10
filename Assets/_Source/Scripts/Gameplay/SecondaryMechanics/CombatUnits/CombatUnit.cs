@@ -7,33 +7,23 @@ public abstract class CombatUnit : MonoBehaviour, IPooledObject<CombatUnit>, IDa
     // todo Можно реализовать композит тулбар на общей вьюшке
     private CombatUnitView _view;
 
-    protected Health Health;
-
     public event Action<CombatUnit> Released;
     public event Action Attacked;
     public event Action TakedDamage;
 
     public CombatUnitConfig Config { get; private set; }
-    public AttackEnergy AttackEnergy;
+    public Health Health { get; private set; }
+    public AttackEnergy AttackEnergy { get; private set; }
     public bool IsDied => Health.Current == 0;
     public bool IsBattling { get; private set; }
 
-    public void Initialize(CombatUnitConfig config, CombatUnitView view)
+    public void Initialize(CombatUnitConfig config)
     {
-        _view = view;
+        Config = config;
 
         Health = new Health();
-        AttackEnergy = new AttackEnergy(config.EnergyStripeCapacity, config.EnergyStripesCount, config.MaxHealth);
+        AttackEnergy = new AttackEnergy(Config.EnergyStripeCapacity, Config.EnergyStripesCount, Config.AttackEnergy);
 
-        List<IDisplayableAtBar> displayablesAtBar = new List<IDisplayableAtBar>()
-        {
-            Health,
-            AttackEnergy
-        }; // todo Реализовать композитную схему добавления всякой херни
-        // (здоровья, энергии на юнита), чтобы в последствии просто
-        // добавлять штуки через единую точку без изменения вот этого списка
-
-        _view.Initialize(displayablesAtBar);
         Subscribe();
     }
 
@@ -84,11 +74,11 @@ public abstract class CombatUnit : MonoBehaviour, IPooledObject<CombatUnit>, IDa
 
     protected void Subscribe()
     {
-        _view.Subscribe();
+        // _view.Subscribe();
     }
 
     protected void Unsubscribe()
     {
-        _view.Unsubscribe();
+        // _view.Unsubscribe();
     }
 }
