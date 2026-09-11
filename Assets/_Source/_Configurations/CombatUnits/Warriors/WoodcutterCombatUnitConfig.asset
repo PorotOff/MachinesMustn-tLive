@@ -14,10 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ID>k__BackingField: 0
   <Health>k__BackingField: 50
+  <MinHealth>k__BackingField: 0
   <MaxHealth>k__BackingField: 100
-  <AttackEnergy>k__BackingField: 0
+  <AttackEnergy>k__BackingField: 13
+  <MinAttackEnergy>k__BackingField: 0
+  <MaxAttackEnergy>k__BackingField: 20
   <EnergyStripeCapacity>k__BackingField: 5
-  <EnergyStripesCount>k__BackingField: 3
+  <EnergyStripesCount>k__BackingField: 4
   <Damage>k__BackingField: 5
   <AttackSpeed>k__BackingField: 1
   <View>k__BackingField: {fileID: 8422945931221827720, guid: a805e6ad0b564db479da08490471e96e, type: 3}

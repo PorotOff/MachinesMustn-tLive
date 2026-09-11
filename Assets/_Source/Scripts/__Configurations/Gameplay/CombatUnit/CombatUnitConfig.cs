@@ -1,3 +1,4 @@
+using Unity.Collections;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "CombatUnitConfig", menuName = "Configurations/Gameplay/CombatUnits/CombatUnitConfig", order = 0)]
@@ -8,10 +9,13 @@ public class CombatUnitConfig : ScriptableObject
 
     [field: Header("Health")]
     [field: SerializeField] public int Health { get; private set; }
+    [field: SerializeField] public int MinHealth { get; private set; }
     [field: SerializeField] public int MaxHealth { get; private set; }
 
     [field: Header("Attack energy")]
     [field: SerializeField] public int AttackEnergy { get; private set; }
+    [field: SerializeField] public int MinAttackEnergy { get; private set; }
+    [field: SerializeField] public int MaxAttackEnergy { get; private set; }
     [field: SerializeField] public int EnergyStripeCapacity { get; private set; }
     [field: SerializeField] public int EnergyStripesCount { get; private set; }
 
@@ -23,4 +27,9 @@ public class CombatUnitConfig : ScriptableObject
 
     [field: Header("View")]
     [field: SerializeField] public CombatUnitView View { get; private set; }
+
+    private void OnValidate()
+    {
+        MaxAttackEnergy = EnergyStripeCapacity * EnergyStripesCount;
+    }
 }

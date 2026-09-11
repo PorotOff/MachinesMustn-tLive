@@ -9,10 +9,6 @@ public class CombatUnitBuilder : MonoBehaviour
     [SerializeField] private CombatUnitRoot _combatUnitRootPrefab;
     [SerializeField] private CombatUnitConfig _combatUnitConfig;
 
-    // todo Реализовать сбор юнита через композицию
-    // Вьюшка юнита не должна содержать в себе сразу всё. Можно тоже через композицию добавлять какие-то показатели и для каждого показателя
-    // должна быть вьюшка.
-
     private void Start()
     {
         List<WarriorCombatUnit> warriors = new List<WarriorCombatUnit>();

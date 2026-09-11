@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class AnimatedBarMinToMaxValueIndicator : BarMinToMaxValueIndicator
+public class AnimatedSliderValueIndicator : SliderValueIndicator
 {
     [SerializeField] private float _interpolationStep = 0.1f;
 
@@ -12,10 +12,10 @@ public class AnimatedBarMinToMaxValueIndicator : BarMinToMaxValueIndicator
         if (_coroutine != null)
             StopCoroutine(_coroutine);
 
-        _coroutine = StartCoroutine(UpdateHealth(current));
+        _coroutine = StartCoroutine(UpdateIndicator(current));
     }
 
-    private IEnumerator UpdateHealth(float current) // todo Rename To UpdateIndicator
+    private IEnumerator UpdateIndicator(float current)
     {
         while (Slider.value != current)
         {

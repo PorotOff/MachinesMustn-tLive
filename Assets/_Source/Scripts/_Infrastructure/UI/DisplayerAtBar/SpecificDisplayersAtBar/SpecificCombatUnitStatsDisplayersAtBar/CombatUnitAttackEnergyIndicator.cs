@@ -1,28 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackEnergyBar : CombatUnitStatsDisplayerAtBar
+public class CombatUnitAttackEnergyIndicator : CombatUnitStatIndicator
 {
     [SerializeField] private List<EnergyStripe> _energyStripes;
-
-    private void OnEnable()
-    {
-        
-    }
-
-    private void OnDisable()
-    {
-        DisplayerAtBar.Displayed -= UpdateStripes;
-    }
 
     public override void Initialize(CombatUnit combatUnit)
     {
         base.Initialize(combatUnit);
-        DisplayerAtBar.Initialize(CombatUnit.AttackEnergy);
+        Indicator.Initialize(CombatUnit.AttackEnergy);
 
         UpdateStripes();
-        DisplayerAtBar.Displayed += UpdateStripes;
-        // todo Пофиксить все подписки на DisplayerAtBar (или переделать его нахуй по нормальному)
     }
 
     private void UpdateStripes()

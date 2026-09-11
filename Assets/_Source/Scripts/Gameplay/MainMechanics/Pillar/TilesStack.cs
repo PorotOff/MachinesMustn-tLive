@@ -26,8 +26,6 @@ public class TilesStack : IReadOnlyTilesStack
     {
         _tiles.Add(tile);
         TileAdded?.Invoke();
-
-        Debug.Log("Tile added");
     }
 
     public Tile Pop()

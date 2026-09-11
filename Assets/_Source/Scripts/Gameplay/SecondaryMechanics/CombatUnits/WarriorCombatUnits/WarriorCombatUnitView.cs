@@ -8,7 +8,7 @@ public class WarriorCombatUnitView : CombatUnitView
         _attackEnergyDisplayerAtBar = attackEnergyDisplayerAtBar;
     }
 
-    public void Initialize(Health health, AttackEnergy attackEnergy)
+    public void Initialize(HealthStat health, AttackEnergyStat attackEnergy)
     {
         // Initialize(health);
         // _attackEnergyDisplayerAtBar.Initialize(attackEnergy);

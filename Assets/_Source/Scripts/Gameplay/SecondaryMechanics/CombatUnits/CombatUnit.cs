@@ -4,7 +4,6 @@ using UnityEngine;
 
 public abstract class CombatUnit : MonoBehaviour, IPooledObject<CombatUnit>, IDamageable, IPurchasable
 {
-    // todo Можно реализовать композит тулбар на общей вьюшке
     private CombatUnitView _view;
 
     public event Action<CombatUnit> Released;
@@ -12,8 +11,8 @@ public abstract class CombatUnit : MonoBehaviour, IPooledObject<CombatUnit>, IDa
     public event Action TakedDamage;
 
     public CombatUnitConfig Config { get; private set; }
-    public Health Health { get; private set; }
-    public AttackEnergy AttackEnergy { get; private set; }
+    public HealthStat Health { get; private set; }
+    public AttackEnergyStat AttackEnergy { get; private set; }
     public bool IsDied => Health.Current == 0;
     public bool IsBattling { get; private set; }
 
@@ -21,8 +20,8 @@ public abstract class CombatUnit : MonoBehaviour, IPooledObject<CombatUnit>, IDa
     {
         Config = config;
 
-        Health = new Health();
-        AttackEnergy = new AttackEnergy(Config.EnergyStripeCapacity, Config.EnergyStripesCount, Config.AttackEnergy);
+        Health = new HealthStat(Config.MinHealth, Config.MaxHealth, Config.Health);
+        AttackEnergy = new AttackEnergyStat(Config.EnergyStripeCapacity, Config.EnergyStripesCount, Config.MinAttackEnergy, Config.MaxAttackEnergy, Config.AttackEnergy);
 
         Subscribe();
     }
@@ -37,7 +36,7 @@ public abstract class CombatUnit : MonoBehaviour, IPooledObject<CombatUnit>, IDa
     {
         IsBattling = true;
 
-        Health.TakeDamage(damage);
+        Health.Reduce(damage);
 
         IsBattling = false;
         InvokeTakedDamage();
@@ -59,7 +58,7 @@ public abstract class CombatUnit : MonoBehaviour, IPooledObject<CombatUnit>, IDa
 
     protected void SpendEnergy(int amount)
     {
-        AttackEnergy.Remove(amount);
+        AttackEnergy.Reduce(amount);
     }
 
     protected void InvokeAttacked()
