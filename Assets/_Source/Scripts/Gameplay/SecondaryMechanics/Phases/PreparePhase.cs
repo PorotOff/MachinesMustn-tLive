@@ -1,23 +1,22 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class PreparePhase : IPhase
 {
-    private CellsField _cellsField;
+    private CellField _cellField;
     private int _generalPillarsCount;
-    private PillarsBar _pillarsBar;
+    private PillarBar _pillarBar;
     private PillarSpawner _pillarSpawner;
     private List<TileConfig> _tileConfigs;
 
     private int _remainingPillars;
     private int _installedPillars;
 
-    public PreparePhase(CellsField cellsField, int generalPillarsCount, PillarsBar pillarsBar, PillarSpawner pillarSpawner, List<TileConfig> tileConfigs)
+    public PreparePhase(CellField cellField, int generalPillarsCount, PillarBar pillarBar, PillarSpawner pillarSpawner, List<TileConfig> tileConfigs)
     {
-        _cellsField = cellsField;
+        _cellField = cellField;
         _generalPillarsCount = generalPillarsCount;
-        _pillarsBar = pillarsBar;
+        _pillarBar = pillarBar;
         _pillarSpawner = pillarSpawner;
         _tileConfigs = tileConfigs;
 
@@ -36,29 +35,29 @@ public class PreparePhase : IPhase
 
     private void Subscribe()
     {
-        _cellsField.PillarsShuffled += OnAnyCellOccupied;
+        _cellField.PillarsShuffled += OnAnyCellOccupied;
     }
 
     private void Unsubscribe()
     {
-        _cellsField.PillarsShuffled -= OnAnyCellOccupied;
+        _cellField.PillarsShuffled -= OnAnyCellOccupied;
     }
 
     private void OnAnyCellOccupied()
     {
         _installedPillars++;
 
-        TryClearCellsField();
+        TryClearCellField();
         TrySpawnPillars();
         TryOverPhase();
     }
 
-    private void TryClearCellsField()
+    private void TryClearCellField()
     {
         if (_installedPillars != _generalPillarsCount)
             return;
 
-        _cellsField.Clear();
+        _cellField.Clear();
     }
 
     private void TrySpawnPillars()
@@ -66,11 +65,11 @@ public class PreparePhase : IPhase
         if (_remainingPillars == 0)
             return;
 
-        if (_pillarsBar.IsEmpty == false)
+        if (_pillarBar.IsEmpty == false)
             return;
 
-        Pillar[] pillars = _pillarSpawner.Spawn(_pillarsBar.Capacity);
-        _pillarsBar.TakePillars(pillars);
+        Pillar[] pillars = _pillarSpawner.Spawn(_pillarBar.Capacity);
+        _pillarBar.TakePillars(pillars);
 
         _remainingPillars -= pillars.Length;
     }

@@ -2,23 +2,23 @@ using UnityEngine;
 
 public class GameService : MonoBehaviour
 {
-    [SerializeField] private PhasesService _phasesService;
+    [SerializeField] private PhaseService _phaseService;
 
     private void Awake()
     {
-        _phasesService.Initialize();
+        _phaseService.Initialize();
     }
 
     private void OnEnable()
     {
-        _phasesService.EnemiesDied += Win;
-        _phasesService.WarriorsDied += Lose;
+        _phaseService.EnemiesDied += Win;
+        _phaseService.WarriorsDied += Lose;
     }
 
     private void OnDisable()
     {
-        _phasesService.EnemiesDied -= Win;
-        _phasesService.WarriorsDied -= Lose;
+        _phaseService.EnemiesDied -= Win;
+        _phaseService.WarriorsDied -= Lose;
     }
 
     private void Win()

@@ -909,7 +909,7 @@ GameObject:
   - component: {fileID: 145288523}
   - component: {fileID: 145288522}
   m_Layer: 0
-  m_Name: PagesService
+  m_Name: PageService
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2967,7 +2967,7 @@ GameObject:
   - component: {fileID: 621363592}
   - component: {fileID: 621363593}
   m_Layer: 0
-  m_Name: Game
+  m_Name: GameService
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3000,7 +3000,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1a1bc60bb1fa4b49834c69c06299c4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _phasesService: {fileID: 1402254337}
+  _phaseService: {fileID: 1402254337}
 --- !u!1 &644302153
 GameObject:
   m_ObjectHideFlags: 0
@@ -4973,7 +4973,7 @@ GameObject:
   - component: {fileID: 1126315373}
   - component: {fileID: 1126315374}
   m_Layer: 0
-  m_Name: WarriorsChargeService
+  m_Name: WarriorChargeService
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5006,7 +5006,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ef9bd8ec6a084e409c52fb7178fa9f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cellsField: {fileID: 1532731537}
+  _cellField: {fileID: 1532731537}
 --- !u!1 &1147091681
 GameObject:
   m_ObjectHideFlags: 0
@@ -5593,8 +5593,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0be8182d4326b6146ac1fb0bbafaa988, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _warriorsChargeService: {fileID: 1126315374}
-  _combatUnitRootPrefab: {fileID: 9161947696696354279, guid: 4c562c5f3f4a66f4cad6a26bfdf4d144, type: 3}
+  _warriorChargingService: {fileID: 1126315374}
+  _combatUnitRootPrefab: {fileID: 7980692841156661862, guid: 4c562c5f3f4a66f4cad6a26bfdf4d144, type: 3}
   _combatUnitConfig: {fileID: 11400000, guid: b58cf1c99918bf745a16353efefaab41, type: 2}
 --- !u!1 &1311025713
 GameObject:
@@ -6004,7 +6004,7 @@ GameObject:
   - component: {fileID: 1402254336}
   - component: {fileID: 1402254337}
   m_Layer: 0
-  m_Name: PhasesService
+  m_Name: PhaseService
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6037,9 +6037,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 982d9bd670f95a644a2dbd744d40505e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cellsField: {fileID: 1532731537}
+  _cellField: {fileID: 1532731537}
   _generalPillarsCount: 9
-  _pillarsBar: {fileID: 2106217226}
+  _pillarBar: {fileID: 2106217226}
   _pillarSpawner: {fileID: 2062093414}
   _tileConfigs:
   - {fileID: 11400000, guid: d844b8ad14cbe044993c05f40a989a76, type: 2}
@@ -7086,9 +7086,9 @@ Transform:
   - {fileID: 819665464}
   - {fileID: 621363592}
   - {fileID: 1402254336}
+  - {fileID: 1126315373}
   - {fileID: 1462810604}
   - {fileID: 145288523}
-  - {fileID: 1126315373}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1526229522
@@ -7139,7 +7139,7 @@ GameObject:
   - component: {fileID: 1532731536}
   - component: {fileID: 1532731537}
   m_Layer: 0
-  m_Name: CellsField
+  m_Name: CellField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8864,7 +8864,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1809524896}
   m_Layer: 0
-  m_Name: Characters
+  m_Name: CombatUnits
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10571,7 +10571,7 @@ GameObject:
   - component: {fileID: 2106217225}
   - component: {fileID: 2106217226}
   m_Layer: 0
-  m_Name: PillarsBar
+  m_Name: PillarBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
