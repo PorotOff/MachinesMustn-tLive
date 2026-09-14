@@ -18,8 +18,8 @@ MonoBehaviour:
   <MaxHealth>k__BackingField: 100
   <AttackEnergy>k__BackingField: 13
   <MinAttackEnergy>k__BackingField: 0
-  <MaxAttackEnergy>k__BackingField: 20
-  <EnergyStripeCapacity>k__BackingField: 5
+  <MaxAttackEnergy>k__BackingField: 416
+  <EnergyStripeCapacity>k__BackingField: 104
   <EnergyStripesCount>k__BackingField: 4
   <Damage>k__BackingField: 5
   <AttackSpeed>k__BackingField: 1

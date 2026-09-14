@@ -11,12 +11,12 @@ public class WarriorChargingService : MonoBehaviour
 
     private void OnEnable()
     {
-        _cellField.PillarsShuffled += ChargeWarriors;
+        _cellField.PillarShuffler.PillarsShuffled += ChargeWarriors;
     }
 
     private void OnDisable()
     {
-        _cellField.PillarsShuffled -= ChargeWarriors;
+        _cellField.PillarShuffler.PillarsShuffled -= ChargeWarriors;
     }
 
     public void Initialize(List<WarriorCombatUnit> warriors)

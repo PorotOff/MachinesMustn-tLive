@@ -9,8 +9,8 @@ public class PreparePhase : IPhase
     private PillarSpawner _pillarSpawner;
     private List<TileConfig> _tileConfigs;
 
-    private int _remainingPillars;
-    private int _installedPillars;
+    private int _remainingPillarsCount;
+    private int _installedPillarsCount;
 
     public PreparePhase(CellField cellField, int generalPillarsCount, PillarBar pillarBar, PillarSpawner pillarSpawner, List<TileConfig> tileConfigs)
     {
@@ -29,40 +29,43 @@ public class PreparePhase : IPhase
 
     public void Enter()
     {
-        _remainingPillars = _generalPillarsCount;
-        TrySpawnPillars();
+        _remainingPillarsCount = _generalPillarsCount;
+        SpawnPillars();
     }
 
     private void Subscribe()
     {
-        _cellField.PillarsShuffled += OnAnyCellOccupied;
+        _cellField.CellOcupied += IncreaseInstalledPillarsCount;
+        _cellField.PillarShuffler.PillarsShuffled += OnPillarsShuffled;
     }
 
     private void Unsubscribe()
     {
-        _cellField.PillarsShuffled -= OnAnyCellOccupied;
+        _cellField.CellOcupied -= IncreaseInstalledPillarsCount;
+        _cellField.PillarShuffler.PillarsShuffled -= OnPillarsShuffled;
     }
 
-    private void OnAnyCellOccupied()
+    private void IncreaseInstalledPillarsCount()
     {
-        _installedPillars++;
-
-        TryClearCellField();
-        TrySpawnPillars();
-        TryOverPhase();
+        _installedPillarsCount++;
     }
 
-    private void TryClearCellField()
+    private void OnPillarsShuffled()
     {
-        if (_installedPillars != _generalPillarsCount)
-            return;
-
-        _cellField.Clear();
+        if (_installedPillarsCount != _generalPillarsCount)
+        {
+            SpawnPillars();
+        }
+        else
+        {
+            _cellField.Clear();
+            OverPhase();
+        }
     }
 
-    private void TrySpawnPillars()
+    private void SpawnPillars()
     {
-        if (_remainingPillars == 0)
+        if (_remainingPillarsCount == 0)
             return;
 
         if (_pillarBar.IsEmpty == false)
@@ -71,14 +74,11 @@ public class PreparePhase : IPhase
         Pillar[] pillars = _pillarSpawner.Spawn(_pillarBar.Capacity);
         _pillarBar.TakePillars(pillars);
 
-        _remainingPillars -= pillars.Length;
+        _remainingPillarsCount -= pillars.Length;
     }
 
-    private void TryOverPhase()
+    private void OverPhase()
     {
-        if (_installedPillars != _generalPillarsCount)
-            return;
-
         Unsubscribe();
         Over?.Invoke();
     }

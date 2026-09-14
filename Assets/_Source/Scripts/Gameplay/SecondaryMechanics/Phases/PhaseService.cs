@@ -22,6 +22,7 @@ public class PhaseService : MonoBehaviour
 
     public void Initialize()
     {
+        _cellField.Initialize();
         SetPhase(new PreparePhase(_cellField, _generalPillarsCount, _pillarBar, _pillarSpawner, _tileConfigs));
     }
 
@@ -53,6 +54,8 @@ public class PhaseService : MonoBehaviour
         Subscribe();
 
         _currentPhase.Enter();
+
+        Debug.Log($"Setted phase: {_currentPhase}");
     }
 
     private void OnPhaseOver()

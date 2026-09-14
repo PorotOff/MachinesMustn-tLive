@@ -42,6 +42,11 @@ public abstract class CombatUnit : MonoBehaviour, IPooledObject<CombatUnit>, IDa
         InvokeTakedDamage();
     }
 
+    public void StandAtPosition(Vector3 position)
+    {
+        transform.position = position;
+    }
+
     public virtual void Attack(List<CombatUnit> opponents)
     {
         IsBattling = true;

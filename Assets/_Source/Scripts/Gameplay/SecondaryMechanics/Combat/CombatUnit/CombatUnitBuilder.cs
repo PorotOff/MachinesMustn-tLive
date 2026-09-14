@@ -1,36 +1,15 @@
-using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class CombatUnitBuilder : MonoBehaviour
+public class CombatUnitBuilder : MonoBehaviour // todo Монобех тут не нужен (но Instantiate не даст его просто так убрать)
 {
-    [SerializeField] private WarriorChargingService _warriorChargingService; // temp временно только для проверки нахуй! Только геи так оставляют
-
-    [SerializeField] private CombatUnitRoot _combatUnitRootPrefab;
-    [SerializeField] private CombatUnitConfig _combatUnitConfig;
-
-    private void Start()
+    public CombatUnit Build<T>(CombatUnitRoot combatUnitRootPrefab, CombatUnitConfig config) where T : CombatUnit
     {
-        List<WarriorCombatUnit> warriors = new List<WarriorCombatUnit>();
-        warriors.Add((WarriorCombatUnit)Build<WoodcutterWarriorCombatUnit>(_combatUnitConfig)); // temp каст тоже временный. и вся эта конструкция в старте тоже временная нахуй
-
-        _warriorChargingService.Initialize(warriors);
-    }
-
-    public CombatUnit Build<T>(CombatUnitConfig config) where T : CombatUnit
-    {
-        var combatUnitRoot = Instantiate(_combatUnitRootPrefab);
+        var combatUnitRoot = Instantiate(combatUnitRootPrefab);
         var combatUnit = combatUnitRoot.AddComponent<T>();
-        var combatUnitView = Instantiate(config.View, combatUnitRoot.ViewContainer);
 
         combatUnit.Initialize(config);
-
-        foreach (var bar in combatUnitRoot.Indicators)
-        {
-            bar.Initialize(combatUnit);
-        }
-
-        // combatUnitView.Initialize();        
+        combatUnitRoot.Indicators.ForEach(indicator => indicator.Initialize(combatUnit));
 
         return combatUnit;
     }

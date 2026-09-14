@@ -13,7 +13,7 @@ public class Pillar : MonoBehaviour, IPooledObject<Pillar>, IAttachable
     private TileStack _tileStack;
     private BoxColliderTransformer _boxColliderTransformer;
 
-    private IAttachablePoint _attachmentPoint;
+    private IAttachmentPoint _attachmentPoint;
 
     public event Action<Pillar> Released;
 
@@ -48,29 +48,25 @@ public class Pillar : MonoBehaviour, IPooledObject<Pillar>, IAttachable
         return topTile;
     }
 
-    public void Attach(IAttachablePoint attachmentPoint)
+    public void Attach(IAttachmentPoint attachmentPoint)
     {
         if (attachmentPoint.IsFree == false)
         {
-            Return();
+            _attachmentPoint.ReturnAttachable();
             return;
         }
 
         Detach();
 
-        attachmentPoint.Occupy(this);
-        _boxCollider.enabled = attachmentPoint.IsEnableCollider;
         _attachmentPoint = attachmentPoint;
+        _boxCollider.enabled = _attachmentPoint.IsEnableCollider;        
+
+        _attachmentPoint.Occupy(this);
     }
 
     public void Attach(Vector3 position)
     {
         _transform.position = position;
-    }
-
-    public void Return()
-    {
-        _attachmentPoint.Occupy(this);
     }
 
     public void Detach()
@@ -84,7 +80,12 @@ public class Pillar : MonoBehaviour, IPooledObject<Pillar>, IAttachable
 
     public void Release()
     {
-        Detach();
+        if (_tileStack.Count > 0)
+        {
+            _tileStack.Clear();
+        }
+        
+        Detach();   
         Unsubscribe();
         Released?.Invoke(this);
     }
@@ -95,21 +96,20 @@ public class Pillar : MonoBehaviour, IPooledObject<Pillar>, IAttachable
         _tileStack.TilesOver += Release;
     }
 
-    private void Unsubscribe()
+    private void Unsubscribe() // todo Проверить во всём проекте подписки и отписки на корректность
     {
         _dragger.PuttedDown -= OnPuttedDown;
         _tileStack.TilesOver -= Release;
     }
 
-    private void OnPuttedDown(IAttachablePoint attachablePoint)
+    private void OnPuttedDown(IAttachmentPoint attachablePoint)
     {
         if (attachablePoint == null)
         {
-            Return();
+            _attachmentPoint.ReturnAttachable();
+            return;
         }
-        else
-        {
-            Attach(attachablePoint);
-        }
+        
+        Attach(attachablePoint);
     }
-}
+}   

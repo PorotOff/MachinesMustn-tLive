@@ -4,4 +4,6 @@ public class CombatUnitView : MonoBehaviour
 {
     [field: SerializeField] public CombatUnitAnimator Animator { get; private set; }
     [field: SerializeField] public CombatUnitAnimationEvents AnimationEvents { get; private set; }
+
+    // todo прикрутить порядок отрисовки для юнитов, если они начнут накладываться друг на друга в игре
 }

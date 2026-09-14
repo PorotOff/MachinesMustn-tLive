@@ -45,4 +45,11 @@ public class TileStack : IReadOnlyTileStack
     {
         return _tiles[_tiles.Count - 1];
     }
+
+    public void Clear()
+    {
+        _tiles.Clear();
+    }
+
+    // todo может быть сделать tilestack через композицию?
 }

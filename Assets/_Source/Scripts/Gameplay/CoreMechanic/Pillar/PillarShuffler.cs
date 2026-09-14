@@ -1,6 +1,10 @@
-public class PillarShuffler
+using System;
+
+public class PillarShuffler : IReadOnlyPillarShuffler
 {
     private PillarFinder _pillarFinder;
+
+    public event Action PillarsShuffled;
 
     public PillarShuffler(Cell[] cells)
     {
@@ -15,6 +19,7 @@ public class PillarShuffler
                 return;
 
             ShuffleTiles(foundPillar, attachedPillar);
+            PillarsShuffled?.Invoke();
         }
         else
         {

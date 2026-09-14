@@ -7,18 +7,16 @@ public class CellField : MonoBehaviour
     [SerializeField] private Cell[] _cells;
 
     private PillarShuffler _pillarShuffler;
+    
+    public event Action CellOcupied;
 
-    public event Action PillarsShuffled;
-
-    private void Awake()
-    {
-        _pillarShuffler = new PillarShuffler(_cells);
-    }
+    public IReadOnlyPillarShuffler PillarShuffler => _pillarShuffler;
 
     private void OnEnable()
     {
         foreach (var cell in _cells)
         {
+            cell.Occupied += InvokeCellOcupied;
             cell.Occupied += Shuffle;
         }
     }
@@ -27,8 +25,14 @@ public class CellField : MonoBehaviour
     {
         foreach (var cell in _cells)
         {
+            cell.Occupied -= InvokeCellOcupied;
             cell.Occupied -= Shuffle;
         }
+    }
+
+    public void Initialize()
+    {
+        _pillarShuffler = new PillarShuffler(_cells);
     }
 
     public Pillar[] GetPillars()
@@ -44,6 +48,11 @@ public class CellField : MonoBehaviour
         }
     }
 
+    private void InvokeCellOcupied(IAttachable attachable)
+    {
+        CellOcupied?.Invoke();
+    }
+
     private void Shuffle(IAttachable attachable)
     {
         Pillar pillar = attachable as Pillar;
@@ -52,6 +61,5 @@ public class CellField : MonoBehaviour
             throw new ArgumentNullException($"{nameof(attachable)} must be only the {nameof(Pillar)}. {nameof(pillar)} = {pillar.GetType()}");
 
         _pillarShuffler.Shuffle(pillar);
-        PillarsShuffled?.Invoke();
     }
 }
