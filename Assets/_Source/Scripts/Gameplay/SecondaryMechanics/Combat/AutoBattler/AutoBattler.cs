@@ -21,6 +21,7 @@ public class AutoBattler
     {
         Unsubscribe();
         _currentAttacker = _attackers.Dequeue();
+        Debug.Log($"Cureent attacker: {_currentAttacker}");
         Subscribe();
 
         _currentAttacker.Attack(new List<CombatUnit>(_opponents));
@@ -67,12 +68,14 @@ public class AutoBattler
 
         if (IsOpponentsDied())
         {
+            Unsubscribe();
             OpponentsDied?.Invoke();
             return;
         }
 
         if (_attackers.Count == 0)
         {
+            Unsubscribe();
             AttackersOver?.Invoke();
             return;
         }

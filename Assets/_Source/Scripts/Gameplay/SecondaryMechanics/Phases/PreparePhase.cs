@@ -1,71 +1,74 @@
 using System;
-using System.Collections.Generic;
 
 public class PreparePhase : IPhase
 {
     private CellField _cellField;
-    private int _generalPillarsCount;
+    private int _availableSteps;
     private PillarBar _pillarBar;
     private PillarSpawner _pillarSpawner;
-    private List<TileConfig> _tileConfigs;
 
-    private int _remainingPillarsCount;
-    private int _installedPillarsCount;
+    private int _remainingSteps;
+    private int _takenSteps;
 
-    public PreparePhase(CellField cellField, int generalPillarsCount, PillarBar pillarBar, PillarSpawner pillarSpawner, List<TileConfig> tileConfigs)
+    public PreparePhase(CellField cellField, int availableSteps, PillarBar pillarBar, PillarSpawner pillarSpawner)
     {
         _cellField = cellField;
-        _generalPillarsCount = generalPillarsCount;
+        _availableSteps = availableSteps;
         _pillarBar = pillarBar;
         _pillarSpawner = pillarSpawner;
-        _tileConfigs = tileConfigs;
-
-        _pillarSpawner.Initialize(_tileConfigs);
-
-        Subscribe();
     }
 
     public event Action Over;
 
     public void Enter()
     {
-        _remainingPillarsCount = _generalPillarsCount;
+        Subscribe();
+
+        _remainingSteps = _availableSteps;
         SpawnPillars();
+    }
+
+    public void Exit()
+    {
+        Unsubscribe();
     }
 
     private void Subscribe()
     {
-        _cellField.CellOcupied += IncreaseInstalledPillarsCount;
-        _cellField.PillarShuffler.PillarsShuffled += OnPillarsShuffled;
+        _cellField.CellOcupied += OnCellOcupied;
+        _cellField.PillarShuffler.ShuffleOver += OnShuffleOver;
     }
 
     private void Unsubscribe()
     {
-        _cellField.CellOcupied -= IncreaseInstalledPillarsCount;
-        _cellField.PillarShuffler.PillarsShuffled -= OnPillarsShuffled;
+        if (_cellField == null)
+            return;
+
+        _cellField.CellOcupied -= OnCellOcupied;
+        _cellField.PillarShuffler.ShuffleOver -= OnShuffleOver;
     }
 
-    private void IncreaseInstalledPillarsCount()
+    private void OnCellOcupied()
     {
-        _installedPillarsCount++;
+        _takenSteps++;
     }
 
-    private void OnPillarsShuffled()
+    private void OnShuffleOver()
     {
-        if (_installedPillarsCount != _generalPillarsCount)
+        if (_takenSteps == _availableSteps)
         {
-            SpawnPillars();
+            _cellField.Clear();
+            Over?.Invoke();
         }
         else
         {
-            _cellField.Clear();
-            OverPhase();
+            SpawnPillars();
         }
     }
 
     private void SpawnPillars()
     {
-        if (_remainingPillarsCount == 0)
+        if (_remainingSteps == 0)
             return;
 
         if (_pillarBar.IsEmpty == false)
@@ -74,12 +77,6 @@ public class PreparePhase : IPhase
         Pillar[] pillars = _pillarSpawner.Spawn(_pillarBar.Capacity);
         _pillarBar.TakePillars(pillars);
 
-        _remainingPillarsCount -= pillars.Length;
-    }
-
-    private void OverPhase()
-    {
-        Unsubscribe();
-        Over?.Invoke();
+        _remainingSteps -= pillars.Length;
     }
 }

@@ -3,61 +3,61 @@ using System;
 public class PillarShuffler : IReadOnlyPillarShuffler
 {
     private PillarFinder _pillarFinder;
-
-    public event Action PillarsShuffled;
+    
+    public event Action ShuffleOver;
 
     public PillarShuffler(Cell[] cells)
     {
         _pillarFinder = new PillarFinder(cells);
     }
 
-    public void Shuffle(Pillar attachedPillar)
+    public void Shuffle(Pillar pillar)
     {
-        if (attachedPillar.TileStack.IsMonotypic)
+        try
         {
-            if (_pillarFinder.TryFindMonotypicPillar(attachedPillar, out Pillar foundPillar) == false)
-                return;
+            if (pillar.TileStack.IsMonotypic)
+            {
+                if (_pillarFinder.TryFindMonotypicPillar(pillar, out Pillar monotypicPillar) == false)
+                    return;
 
-            ShuffleTiles(foundPillar, attachedPillar);
-            PillarsShuffled?.Invoke();
+                ShuffleTiles(monotypicPillar, pillar);
+            }
+            else
+            {
+                if (TryShuffleCombo(pillar))
+                    return;
+
+                DisassemblePillar(pillar);
+            }
         }
-        else
+        finally
         {
-            if (TryMakeCombo(attachedPillar))
-                return;
-
-            DisassemblePillar(attachedPillar);
+            ShuffleOver?.Invoke();
         }
     }
 
-    private bool TryMakeCombo(Pillar attachedPillar)
+    private bool TryShuffleCombo(Pillar pillar)
     {
-        if (_pillarFinder.TryFindMonotypicPillar(attachedPillar, out Pillar firstFoundPillar) == false)
+        if (_pillarFinder.TryFindMonotypicPillar(pillar, out Pillar firstMonotypicPillar) == false)
             return false;
 
-        if (_pillarFinder.TryFindMonotypicPillar(firstFoundPillar, out Pillar secondFoundPillar) == false)
+        if (_pillarFinder.TryFindMonotypicPillar(firstMonotypicPillar, out Pillar secondMonotypicPillar) == false)
             return false;
 
-        ShuffleTiles(firstFoundPillar, attachedPillar);
-        ShuffleTiles(attachedPillar, secondFoundPillar);
-
+        ShuffleTiles(firstMonotypicPillar, pillar);
+        ShuffleTiles(pillar, secondMonotypicPillar);
+        
         return true;
     }
 
-    private void DisassemblePillar(Pillar attachedPillar)
+    private void DisassemblePillar(Pillar pillar)
     {
-        for (int i = 0; i < Constants.MaxTilesCountAtPillar; i++)
+        while (pillar.TileStack.IsMonotypic == false)
         {
-            if (attachedPillar.TileStack.IsEmpty)
+            if (_pillarFinder.TryFindMonotypicPillar(pillar, out Pillar monotypicPillar) == false)
                 return;
 
-            if (_pillarFinder.TryFindMonotypicPillar(attachedPillar, out Pillar pillar) == false)
-                return;
-
-            if (attachedPillar.TileStack.IsMonotypic)
-                return;
-
-            ShuffleTiles(attachedPillar, pillar);
+            ShuffleTiles(pillar, monotypicPillar);
         }
     }
 

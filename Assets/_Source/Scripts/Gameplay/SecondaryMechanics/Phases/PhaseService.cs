@@ -1,86 +1,98 @@
-using System;
-using System.Collections.Generic;
-using UnityEngine;
+    using System;
+    using System.Collections.Generic;
+    using UnityEngine;
 
-public class PhaseService : MonoBehaviour
-{
-    [Header("Prepare phase settings")]
-    [SerializeField] private CellField _cellField;
-    [SerializeField, Min(0)] private int _generalPillarsCount;
-    [SerializeField] private PillarBar _pillarBar;
-    [SerializeField] private PillarSpawner _pillarSpawner;
-    [SerializeField] private List<TileConfig> _tileConfigs;
-
-    [Header("Battle phase settings")]
-    [SerializeField] private List<CombatUnit> _warriors;
-    [SerializeField] private List<CombatUnit> _enemies;
-
-    private IPhase _currentPhase;
-
-    public event Action WarriorsDied;
-    public event Action EnemiesDied;
-
-    public void Initialize()
+    public class PhaseService
     {
-        _cellField.Initialize();
-        SetPhase(new PreparePhase(_cellField, _generalPillarsCount, _pillarBar, _pillarSpawner, _tileConfigs));
-    }
+        private CellField _cellField;
+        private int _availableSteps;
+        private PillarBar _pillarBar;
+        private PillarSpawner _pillarSpawner;
 
-    private void Subscribe()
-    {
-        _currentPhase.Over += OnPhaseOver;
+        private List<CombatUnit> _warriors;
+        private List<CombatUnit> _enemies;
 
-        if (_currentPhase is BattlePhase battlePhase)
+        private IPhase _currentPhase;
+
+        public event Action WarriorsDied;
+        public event Action EnemiesDied;
+
+        public PhaseService(CellField cellField, int availableSteps, PillarBar pillarBar, PillarSpawner pillarSpawner, List<CombatUnit> warriors, List<CombatUnit> enemies)
         {
-            battlePhase.WarriorsDied += OnWarriorsDied;
-            battlePhase.EnemiesDied += OnEnemiesDied;
+            _cellField = cellField;
+            _availableSteps = availableSteps;
+            _pillarBar = pillarBar;
+            _pillarSpawner = pillarSpawner;
+
+            _warriors = warriors;
+            _enemies = enemies;
+
+            SetPhase(new PreparePhase(_cellField, _availableSteps, _pillarBar, _pillarSpawner));
+        }
+
+        public void Subscribe()
+        {
+            if (_currentPhase == null)
+                return;
+
+            _currentPhase.Over += OnPhaseOver;
+
+            if (_currentPhase is BattlePhase battlePhase)
+            {
+                battlePhase.WarriorsDied += OnWarriorsDied;
+                battlePhase.EnemiesDied += OnEnemiesDied;
+            }
+        }
+
+        public void Unsubscribe()
+        {
+            if (_currentPhase == null)
+                return;
+
+            _currentPhase.Over -= OnPhaseOver;
+
+            if (_currentPhase is BattlePhase battlePhase)
+            {
+                battlePhase.WarriorsDied -= OnWarriorsDied;
+                battlePhase.EnemiesDied -= OnEnemiesDied;
+            }
+        }
+
+        private void OnPhaseOver()
+        {        
+            if (_currentPhase is BattlePhase)
+            {
+                SetPhase(new PreparePhase(_cellField, _availableSteps, _pillarBar, _pillarSpawner));
+            }
+            else
+            {
+                SetPhase(new BattlePhase(_warriors, _enemies));
+            }
+        }
+
+        private void SetPhase(IPhase phase)
+        {
+            Unsubscribe();
+            
+            if (_currentPhase != null)
+            {
+                _currentPhase.Exit();
+            }
+
+            _currentPhase = phase;
+            Debug.Log($"Setted phase: {_currentPhase}");
+            
+            Subscribe();
+            _currentPhase.Enter();
+        }
+
+        private void OnWarriorsDied()
+        {
+            WarriorsDied?.Invoke();
+        }
+
+        private void OnEnemiesDied()
+        {
+            EnemiesDied?.Invoke();
         }
     }
-
-    private void Unsubscribe()
-    {
-        _currentPhase.Over -= OnPhaseOver;
-
-        if (_currentPhase is BattlePhase battlePhase)
-        {
-            battlePhase.WarriorsDied -= OnWarriorsDied;
-            battlePhase.EnemiesDied -= OnEnemiesDied;
-        }
-    }
-
-    private void SetPhase(IPhase phase)
-    {
-        _currentPhase = phase;
-        Subscribe();
-
-        _currentPhase.Enter();
-
-        Debug.Log($"Setted phase: {_currentPhase}");
-    }
-
-    private void OnPhaseOver()
-    {
-        Unsubscribe();
-        
-        if (_currentPhase is BattlePhase)
-        {
-            SetPhase(new PreparePhase(_cellField, _generalPillarsCount, _pillarBar, _pillarSpawner, _tileConfigs));
-        }
-        else
-        {
-            SetPhase(new BattlePhase(_warriors, _enemies));
-        }
-    }
-
-    private void OnWarriorsDied()
-    {
-        Unsubscribe();
-        WarriorsDied?.Invoke();
-    }
-
-    private void OnEnemiesDied()
-    {
-        Unsubscribe();
-        EnemiesDied?.Invoke();
-    }
-}

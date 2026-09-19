@@ -20,4 +20,19 @@ public static class ListExtentions
 
         return randomItem;
     }
+
+    public static void CastExeption<T>(this List<T> list)
+    {
+        if (list == null)
+            throw new ArgumentNullException(nameof(list));
+
+        if (list.Count == 0)
+            throw new InvalidOperationException(nameof(list));
+
+        foreach (var item in list)
+        {
+            if (item == null)
+                throw new ArgumentNullException(nameof(item));
+        }
+    }
 }

@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class CombatUnit : MonoBehaviour, IPooledObject<CombatUnit>, IDamageable, IPurchasable
+public class CombatUnit : MonoBehaviour, IPooledObject<CombatUnit>, IDamageable, IPurchasable
 {
+    private Attacker _attacker;
+
     private CombatUnitView _view;
 
     public event Action<CombatUnit> Released;
@@ -16,20 +18,35 @@ public abstract class CombatUnit : MonoBehaviour, IPooledObject<CombatUnit>, IDa
     public bool IsDied => Health.Current == 0;
     public bool IsBattling { get; private set; }
 
-    public void Initialize(CombatUnitConfig config)
+    public void Initialize(CombatUnitConfig config, CombatUnitView view)
     {
         Config = config;
 
+        _attacker = Config.Attacker;
+        _attacker.Initialize(this);
+        
+        _view = view;
+
         Health = new HealthStat(Config.MinHealth, Config.MaxHealth, Config.Health);
         AttackEnergy = new AttackEnergyStat(Config.EnergyStripeCapacity, Config.EnergyStripesCount, Config.MinAttackEnergy, Config.MaxAttackEnergy, Config.AttackEnergy);
-
-        Subscribe();
     }
 
     public void Release()
     {
-        Unsubscribe();
         Released?.Invoke(this);
+    }
+
+    public virtual void Attack(List<CombatUnit> opponents)
+    {
+        while (AttackEnergy.AvailableAttacks > 0)
+        {
+            IsBattling = true;
+
+            _attacker.Attack(opponents);
+
+            IsBattling = false;
+            Attacked?.Invoke();
+        }
     }
 
     public void TakeDamage(int damage)
@@ -39,50 +56,11 @@ public abstract class CombatUnit : MonoBehaviour, IPooledObject<CombatUnit>, IDa
         Health.Reduce(damage);
 
         IsBattling = false;
-        InvokeTakedDamage();
+        TakedDamage?.Invoke();
     }
 
     public void StandAtPosition(Vector3 position)
     {
         transform.position = position;
-    }
-
-    public virtual void Attack(List<CombatUnit> opponents)
-    {
-        IsBattling = true;
-
-        int randomOpponentIndex = UnityEngine.Random.Range(0, opponents.Count);
-        CombatUnit opponent = opponents[randomOpponentIndex];
-
-        opponent.TakeDamage(Config.Damage);
-        SpendEnergy(Config.EnergyStripeCapacity);
-
-        IsBattling = false;
-        InvokeAttacked();
-    }
-
-    protected void SpendEnergy(int amount)
-    {
-        AttackEnergy.Reduce(amount);
-    }
-
-    protected void InvokeAttacked()
-    {
-        Attacked?.Invoke();
-    }
-
-    protected void InvokeTakedDamage()
-    {
-        TakedDamage?.Invoke();
-    }
-
-    protected void Subscribe()
-    {
-        // _view.Subscribe();
-    }
-
-    protected void Unsubscribe()
-    {
-        // _view.Unsubscribe();
     }
 }

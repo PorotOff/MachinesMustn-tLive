@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public abstract class CombatUnitPlace : MonoBehaviour
+public class CombatUnitPlace : MonoBehaviour
 {
     
 }

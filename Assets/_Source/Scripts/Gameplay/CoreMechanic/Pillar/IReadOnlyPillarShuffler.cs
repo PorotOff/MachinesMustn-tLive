@@ -2,5 +2,5 @@ using System;
 
 public interface IReadOnlyPillarShuffler
 {
-    public event Action PillarsShuffled;
+    public event Action ShuffleOver;
 }

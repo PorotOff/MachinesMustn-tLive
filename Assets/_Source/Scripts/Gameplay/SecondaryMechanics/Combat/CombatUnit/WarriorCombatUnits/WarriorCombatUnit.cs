@@ -1,4 +1,4 @@
-public abstract class WarriorCombatUnit : CombatUnit
+public class WarriorCombatUnit : CombatUnit
 {
     
 }

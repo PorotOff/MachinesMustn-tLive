@@ -8,5 +8,5 @@ public class AttackEnergyStat : Stat, IIndicateable
 
     public int EnergyStripeCapacity { get; private set; }
     public int EnergyStripesCount { get; private set; }
-    public int AllowedAttacksCount => Current / EnergyStripeCapacity;
+    public int AvailableAttacks => Current / EnergyStripeCapacity;
 }

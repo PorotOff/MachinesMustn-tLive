@@ -7,6 +7,8 @@ public class CellField : MonoBehaviour
     [SerializeField] private Cell[] _cells;
 
     private PillarShuffler _pillarShuffler;
+
+    // todo Я остановился на том, что обнаружил баг. Когда ставишь ИМЕННО ПОСЛЕДНИЙ тайл на поле, то фаза не обновляется
     
     public event Action CellOcupied;
 

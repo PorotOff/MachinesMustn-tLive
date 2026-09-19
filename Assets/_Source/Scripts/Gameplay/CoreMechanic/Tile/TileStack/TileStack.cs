@@ -13,7 +13,6 @@ public class TileStack : IReadOnlyTileStack
     }
 
     public event Action TilesOver;
-    public event Action TileAdded;
 
     public int Count => _tiles.Count;
     public Tile TopTile => _tiles[Count - 1];
@@ -25,7 +24,6 @@ public class TileStack : IReadOnlyTileStack
     public void Add(Tile tile)
     {
         _tiles.Add(tile);
-        TileAdded?.Invoke();
     }
 
     public Tile Pop()
@@ -48,8 +46,7 @@ public class TileStack : IReadOnlyTileStack
 
     public void Clear()
     {
+        _tiles.ForEach(tile => tile.Release());
         _tiles.Clear();
     }
-
-    // todo может быть сделать tilestack через композицию?
 }
