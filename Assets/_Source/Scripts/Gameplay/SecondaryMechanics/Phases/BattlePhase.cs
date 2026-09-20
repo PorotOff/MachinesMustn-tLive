@@ -33,7 +33,7 @@ public class BattlePhase : IPhase
 
     public void Exit()
     {
-        Unsubscribe();
+        // Unsubscribe();
     }
 
     private void Subscribe()

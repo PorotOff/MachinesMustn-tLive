@@ -30,7 +30,7 @@
             SetPhase(new PreparePhase(_cellField, _availableSteps, _pillarBar, _pillarSpawner));
         }
 
-        public void Subscribe()
+        private void Subscribe()
         {
             if (_currentPhase == null)
                 return;
@@ -44,7 +44,7 @@
             }
         }
 
-        public void Unsubscribe()
+        private void Unsubscribe()
         {
             if (_currentPhase == null)
                 return;
@@ -70,6 +70,16 @@
             }
         }
 
+        private void OnWarriorsDied()
+        {
+            WarriorsDied?.Invoke();
+        }
+
+        private void OnEnemiesDied()
+        {
+            EnemiesDied?.Invoke();
+        }
+
         private void SetPhase(IPhase phase)
         {
             Unsubscribe();
@@ -84,15 +94,5 @@
             
             Subscribe();
             _currentPhase.Enter();
-        }
-
-        private void OnWarriorsDied()
-        {
-            WarriorsDied?.Invoke();
-        }
-
-        private void OnEnemiesDied()
-        {
-            EnemiesDied?.Invoke();
         }
     }

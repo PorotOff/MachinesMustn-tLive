@@ -48,7 +48,6 @@ public class GameService : MonoBehaviour
 
     private void OnEnable()
     {
-        _phaseService.Subscribe();
         _phaseService.EnemiesDied += Win;
         _phaseService.WarriorsDied += Lose;
 
@@ -57,7 +56,6 @@ public class GameService : MonoBehaviour
 
     private void OnDisable()
     {
-        _phaseService.Unsubscribe();
         _phaseService.EnemiesDied -= Win;
         _phaseService.WarriorsDied -= Lose;
 

@@ -16,14 +16,14 @@ public class PreparePhase : IPhase
         _availableSteps = availableSteps;
         _pillarBar = pillarBar;
         _pillarSpawner = pillarSpawner;
+
+        Subscribe();
     }
 
     public event Action Over;
 
     public void Enter()
     {
-        Subscribe();
-
         _remainingSteps = _availableSteps;
         SpawnPillars();
     }
@@ -41,9 +41,6 @@ public class PreparePhase : IPhase
 
     private void Unsubscribe()
     {
-        if (_cellField == null)
-            return;
-
         _cellField.CellOcupied -= OnCellOcupied;
         _cellField.PillarShuffler.ShuffleOver -= OnShuffleOver;
     }
