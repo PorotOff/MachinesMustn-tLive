@@ -55,10 +55,10 @@ public class BattlePhase : IPhase
     {
         _currentAttacker = attackers[0];
 
-        List<CombatUnit> sortedAliveAttackers = attackers.Where(attacker => attacker.IsDied == false).OrderByDescending(attacker => attacker.Config.AttackSpeed).ToList();
+        List<CombatUnit> sortedAliveAttackers = attackers.Where(attacker => attacker.IsDead == false).OrderByDescending(attacker => attacker.Config.AttackSpeed).ToList();
         Queue<CombatUnit> aliveAttackersQueue = new Queue<CombatUnit>(sortedAliveAttackers);
 
-        List<CombatUnit> aliveOpponents = opponents.Where(attacker => attacker.IsDied == false).ToList();
+        List<CombatUnit> aliveOpponents = opponents.Where(attacker => attacker.IsDead == false).ToList();
 
         _autoBattler = new AutoBattler(aliveAttackersQueue, aliveOpponents);
         

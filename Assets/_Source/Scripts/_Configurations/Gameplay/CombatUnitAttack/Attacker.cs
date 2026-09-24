@@ -17,8 +17,8 @@ public abstract class Attacker : ScriptableObject
 
         foreach (var opponent in opponents)
         {
-            if (opponent.IsDied)
-                throw new InvalidOperationException($"{nameof(opponent)} {nameof(opponent.IsDied)} = {opponent.IsDied}.");
+            if (opponent.IsDead)
+                throw new InvalidOperationException($"{nameof(opponent)} {nameof(opponent.IsDead)} = {opponent.IsDead}.");
         }
     }
 }

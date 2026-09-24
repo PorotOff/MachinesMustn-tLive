@@ -11,11 +11,12 @@ public class CombatUnit : MonoBehaviour, IPooledObject<CombatUnit>, IDamageable,
     public event Action<CombatUnit> Released;
     public event Action Attacked;
     public event Action TakedDamage;
+    public event Action Died;
 
     public CombatUnitConfig Config { get; private set; }
     public HealthStat Health { get; private set; }
     public AttackEnergyStat AttackEnergy { get; private set; }
-    public bool IsDied => Health.Current == 0;
+    public bool IsDead => Health.Current == 0;
     public bool IsBattling { get; private set; }
 
     public void Initialize(CombatUnitConfig config, CombatUnitView view)
@@ -36,15 +37,14 @@ public class CombatUnit : MonoBehaviour, IPooledObject<CombatUnit>, IDamageable,
         Released?.Invoke(this);
     }
 
-    public virtual void Attack(List<CombatUnit> opponents)
+    public void Attack(List<CombatUnit> opponents)
     {
         while (AttackEnergy.AvailableAttacks > 0)
         {
             IsBattling = true;
-
             _attacker.Attack(opponents);
-
             IsBattling = false;
+            
             Attacked?.Invoke();
         }
     }
@@ -52,11 +52,15 @@ public class CombatUnit : MonoBehaviour, IPooledObject<CombatUnit>, IDamageable,
     public void TakeDamage(int damage)
     {
         IsBattling = true;
-
         Health.Reduce(damage);
-
         IsBattling = false;
+
         TakedDamage?.Invoke();
+
+        if (Health.Current == 0)
+        {
+            Died?.Invoke();
+        }
     }
 
     public void StandAtPosition(Vector3 position)

@@ -18,7 +18,7 @@ public class RandomAttacker : Attacker
         {
             for (int i = 0; i < attacksCount; i++)
             {
-                List<CombatUnit> aliveOpponents = cachedOpponents.Where(opponent => opponent.IsDied == false).ToList();
+                List<CombatUnit> aliveOpponents = cachedOpponents.Where(opponent => opponent.IsDead == false).ToList();
 
                 if (aliveOpponents.Count == 0)
                     return;

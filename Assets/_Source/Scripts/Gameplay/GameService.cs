@@ -92,7 +92,7 @@ public class GameService : MonoBehaviour
 
         if (fullPillars.Count != 0)
         {
-            List<WarriorCombatUnit> aliveWarriors = _warriors.Where(warrior => warrior.IsDied == false).ToList();
+            List<WarriorCombatUnit> aliveWarriors = _warriors.Where(warrior => warrior.IsDead == false).ToList();
 
             _warriorChargingService.Charge(aliveWarriors, fullPillars);
             fullPillars.ForEach(pillar => pillar.Release());

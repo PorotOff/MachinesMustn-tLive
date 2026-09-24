@@ -31,7 +31,7 @@ public class AutoBattler
     {
         foreach (var opponent in _opponents)
         {
-            if (opponent.IsDied == false)
+            if (opponent.IsDead == false)
                 return false;
         }
 
