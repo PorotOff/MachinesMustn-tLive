@@ -6,18 +6,14 @@ public class CombatUnit : MonoBehaviour, IPooledObject<CombatUnit>, IDamageable,
 {
     private Attacker _attacker;
 
-    private CombatUnitView _view;
-
     public event Action<CombatUnit> Released;
-    public event Action Attacked;
-    public event Action TakedDamage;
     public event Action Died;
 
     public CombatUnitConfig Config { get; private set; }
+    public CombatUnitView View { get; private set;}
     public HealthStat Health { get; private set; }
     public AttackEnergyStat AttackEnergy { get; private set; }
     public bool IsDead => Health.Current == 0;
-    public bool IsBattling { get; private set; }
 
     public void Initialize(CombatUnitConfig config, CombatUnitView view)
     {
@@ -26,7 +22,7 @@ public class CombatUnit : MonoBehaviour, IPooledObject<CombatUnit>, IDamageable,
         _attacker = Config.Attacker;
         _attacker.Initialize(this);
         
-        _view = view;
+        View = view;
 
         Health = new HealthStat(Config.MinHealth, Config.MaxHealth, Config.Health);
         AttackEnergy = new AttackEnergyStat(Config.EnergyStripeCapacity, Config.EnergyStripesCount, Config.MinAttackEnergy, Config.MaxAttackEnergy, Config.AttackEnergy);
@@ -41,21 +37,16 @@ public class CombatUnit : MonoBehaviour, IPooledObject<CombatUnit>, IDamageable,
     {
         while (AttackEnergy.AvailableAttacks > 0)
         {
-            IsBattling = true;
             _attacker.Attack(opponents);
-            IsBattling = false;
-            
-            Attacked?.Invoke();
         }
+
+        // todo Заменить цикл на обработчики события. И вот там проверять, если осталась ещё энергия, то атаковать опять.
+        // todo Реализовать состояния юнитов, чтобы удобоно проверять, находится ли юнит в бою или уже отстрелялся.
     }
 
     public void TakeDamage(int damage)
     {
-        IsBattling = true;
         Health.Reduce(damage);
-        IsBattling = false;
-
-        TakedDamage?.Invoke();
 
         if (Health.Current == 0)
         {

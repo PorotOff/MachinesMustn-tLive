@@ -24,4 +24,4 @@ MonoBehaviour:
   <Damage>k__BackingField: 10
   <AttackSpeed>k__BackingField: 5
   <Attacker>k__BackingField: {fileID: 11400000, guid: b9b93e8a5ad93aa40b1f7c3c21e8822a, type: 2}
-  <View>k__BackingField: {fileID: 3775645059689889004, guid: 167bd7e30cb41bc4c89e46abbb584ca9, type: 3}
+  <View>k__BackingField: {fileID: 2727640983625107731, guid: 167bd7e30cb41bc4c89e46abbb584ca9, type: 3}
