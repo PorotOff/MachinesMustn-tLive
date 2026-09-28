@@ -4,15 +4,21 @@ using UnityEngine;
 public class CombatUnitAnimationEvents : MonoBehaviour
 {
     public event Action Attacked;
-    public event Action TakingDamageFinished;
+    public event Action TakeDamageAnimationComplete;
+    public event Action DieAnimationComplete;
 
     public void InvokeAttacked()
     {
         Attacked?.Invoke();
     }
 
-    public void InvokeTakingDamageFinished()
+    public void InvokeTakeDamageAnimationComplete()
     {
-        TakingDamageFinished?.Invoke();
+        TakeDamageAnimationComplete?.Invoke();
+    }
+
+    public void InvokeDieAnimationComplete()
+    {
+        DieAnimationComplete?.Invoke();
     }
 }

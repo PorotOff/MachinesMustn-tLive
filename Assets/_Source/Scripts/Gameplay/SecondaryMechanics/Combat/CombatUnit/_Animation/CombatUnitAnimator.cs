@@ -6,6 +6,7 @@ public class CombatUnitAnimator : MonoBehaviour
     private readonly int Idle = Animator.StringToHash(nameof(Idle));
     private readonly int Attack = Animator.StringToHash(nameof(Attack));
     private readonly int TakeDamage = Animator.StringToHash(nameof(TakeDamage));
+    private readonly int Die = Animator.StringToHash(nameof(Die));
 
     private Animator _animator;
 
@@ -27,5 +28,10 @@ public class CombatUnitAnimator : MonoBehaviour
     public void SetTakeDamage()
     {
         _animator.SetTrigger(TakeDamage);
+    }
+
+    public void SetDie()
+    {
+        _animator.SetTrigger(Die);
     }
 }

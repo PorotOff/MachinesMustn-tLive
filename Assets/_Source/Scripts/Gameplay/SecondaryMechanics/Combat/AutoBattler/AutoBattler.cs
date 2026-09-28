@@ -40,11 +40,11 @@ public class AutoBattler
 
     private void Subscribe()
     {
-        _currentAttacker.Attacked += OnCombatUnitBattleOver;
+        // _currentAttacker.Attacked += OnCombatUnitBattleOver;
 
         foreach (var opponent in _opponents)
         {
-            opponent.TakedDamage += OnCombatUnitBattleOver;
+            // opponent.TakedDamage += OnCombatUnitBattleOver;
         }
     }
 
@@ -52,12 +52,12 @@ public class AutoBattler
     {
         if (_currentAttacker != null)
         {
-            _currentAttacker.Attacked -= OnCombatUnitBattleOver;
+            // _currentAttacker.Attacked -= OnCombatUnitBattleOver;
         }
 
         foreach (var opponent in _opponents)
         {
-            opponent.TakedDamage -= OnCombatUnitBattleOver;
+            // opponent.TakedDamage -= OnCombatUnitBattleOver;
         }
     }
 
@@ -85,14 +85,14 @@ public class AutoBattler
 
     private bool IsAnybodyBattling()
     {
-        if (_currentAttacker.IsBattling)
-            return true;
+        // if (_currentAttacker.IsBattling)
+        //     return true;
             
-        foreach (var opponent in _opponents)
-        {
-            if (opponent.IsBattling)
-                return true;
-        }
+        // foreach (var opponent in _opponents)
+        // {
+        //     if (opponent.IsBattling)
+        //         return true;
+        // }
 
         return false;
     }

@@ -6,6 +6,9 @@ public abstract class DamageTaker
 
     public void Initialize(CombatUnit unit)
     {
+        if (unit == null)
+            throw new ArgumentNullException(nameof(unit));
+            
         CombatUnit = unit;
     }
 

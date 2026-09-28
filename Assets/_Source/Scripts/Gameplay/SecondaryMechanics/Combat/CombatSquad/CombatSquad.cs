@@ -23,7 +23,7 @@ public class CombatSquad
     {
         foreach (var unit in _combatUnits)
         {
-            unit.Attacked += OnCombatUnitAttacked;
+            // unit.Attacked += OnCombatUnitAttacked;
             unit.Died += OnCombatUnitDied;
         }
     }
@@ -32,7 +32,7 @@ public class CombatSquad
     {
         foreach (var unit in _combatUnits)
         {
-            unit.Attacked -= OnCombatUnitAttacked;
+            // unit.Attacked -= OnCombatUnitAttacked;
             unit.Died -= OnCombatUnitDied;
         }
     }
@@ -41,10 +41,10 @@ public class CombatSquad
     {
         List<CombatUnit> deadUnits = _combatUnits.Where(unit => unit.IsDead).ToList();
 
-        foreach (var deatUnit in deadUnits)
+        foreach (var deadUnit in deadUnits)
         {
-            deatUnit.Attacked -= OnCombatUnitAttacked;
-            deatUnit.Died -= OnCombatUnitDied;
+            // deadUnit.Attacked -= OnCombatUnitAttacked;
+            deadUnit.Died -= OnCombatUnitDied;
         }
     }
 

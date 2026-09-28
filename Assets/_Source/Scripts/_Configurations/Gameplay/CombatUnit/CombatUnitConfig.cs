@@ -21,6 +21,7 @@ public class CombatUnitConfig : ScriptableObject
 
     [field: Header("Damage")]
     [field: SerializeField, Min(0)] public int Damage { get; private set; }
+    [field: SerializeField] public DamageTaker DamageTaker { get; private set; }
 
     [field: Header("Attack")]
     [field: SerializeField, Min(0)] public int AttackSpeed { get; private set; }
