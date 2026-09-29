@@ -5,88 +5,56 @@ using UnityEngine;
 
 public class BattlePhase : IPhase
 {
-    private List<CombatUnit> _warriors;
-    private List<CombatUnit> _enemies;
-
-    private AutoBattler _autoBattler;
-
-    private CombatUnit _currentAttacker;
+    private AutoCombatService _autoCombatService;
 
     public event Action Over;
-    public event Action WarriorsDied;
-    public event Action EnemiesDied;
 
-    public BattlePhase(List<CombatUnit> warriors, List<CombatUnit> enemies)
+    public BattlePhase(List<CombatUnit> warriors, List<CombatUnit> enemies, MonoBehaviour monoBehaviour)
     {
         warriors.CastExeption();
-        warriors.CastExeption();
+        enemies.CastExeption();
 
-        _warriors = warriors;
-        _enemies = enemies;
+        if (monoBehaviour == null)
+            throw new ArgumentNullException(nameof(monoBehaviour));
+
+        _autoCombatService = new AutoCombatService(monoBehaviour);
+        AddCombat(warriors, enemies);
+        AddCombat(enemies, warriors);
     }
 
     public void Enter()
     {
-        // StartBattle(_warriors, _enemies);
-        Over?.Invoke();
+        Subscribe();
+        _autoCombatService.StartCombat();
     }
 
     public void Exit()
     {
-        // Unsubscribe();
+        Unsubscribe();
+    }
+
+    private void AddCombat(List<CombatUnit> attackers, List<CombatUnit> opponents)
+    {
+        List<CombatUnit> aliveAttackers = attackers.Where(attacker => attacker.IsDead == false).ToList();
+        Queue<CombatUnit> aliveAttackersQueue = new Queue<CombatUnit>(aliveAttackers);
+
+        List<CombatUnit> aliveOpponents = opponents.Where(opponent => opponent.IsDead == false).ToList();
+        
+        _autoCombatService.AddCombat(aliveAttackersQueue, aliveOpponents);
     }
 
     private void Subscribe()
     {
-        _autoBattler.AttackersOver += OnAttackersOver;
-        _autoBattler.OpponentsDied += OnOpponentsDied;
+        _autoCombatService.CombatOver += InvokeOver;
     }
 
     private void Unsubscribe()
     {
-        if (_autoBattler == null)
-            return;
-
-        _autoBattler.AttackersOver -= OnAttackersOver;
-        _autoBattler.OpponentsDied -= OnOpponentsDied;
+        _autoCombatService.CombatOver -= InvokeOver;
     }
 
-    private void StartBattle(List<CombatUnit> attackers, List<CombatUnit> opponents)
+    private void InvokeOver()
     {
-        _currentAttacker = attackers[0];
-
-        List<CombatUnit> sortedAliveAttackers = attackers.Where(attacker => attacker.IsDead == false).OrderByDescending(attacker => attacker.Config.AttackSpeed).ToList();
-        Queue<CombatUnit> aliveAttackersQueue = new Queue<CombatUnit>(sortedAliveAttackers);
-
-        List<CombatUnit> aliveOpponents = opponents.Where(attacker => attacker.IsDead == false).ToList();
-
-        _autoBattler = new AutoBattler(aliveAttackersQueue, aliveOpponents);
-        
-        Subscribe();
-        _autoBattler.StartBattle();
-    }
-
-    private void OnAttackersOver()
-    {
-        if (_currentAttacker is EnemyCombatUnit)
-        {
-            Over?.Invoke();
-        }
-        else
-        {
-            StartBattle(_enemies, _warriors);
-        }
-    }
-
-    private void OnOpponentsDied()
-    {
-        if (_currentAttacker is EnemyCombatUnit)
-        {
-            WarriorsDied?.Invoke();
-        }
-        else
-        {
-            EnemiesDied?.Invoke();
-        }
+        Over?.Invoke();
     }
 }

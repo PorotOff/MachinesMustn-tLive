@@ -36,7 +36,15 @@ public class GameService : MonoBehaviour
         _cellField.Initialize();
         _pillarSpawner.Initialize(_tileConfigs);
 
-        _phaseService  = new PhaseService(_cellField, _generalPillarsCount, _pillarBar, _pillarSpawner, _warriors.Select(warrior => warrior as CombatUnit).ToList(), _enemies.Select(enemy => enemy as CombatUnit).ToList());
+        _phaseService  = new PhaseService(
+            _cellField,
+            _generalPillarsCount,
+            _pillarBar,
+            _pillarSpawner,
+            _warriors.Select(warrior => warrior as CombatUnit).ToList(),
+            _enemies.Select(enemy => enemy as CombatUnit).ToList(),
+            this);
+            
         _warriorChargingService = new WarriorChargingService();
     }
 

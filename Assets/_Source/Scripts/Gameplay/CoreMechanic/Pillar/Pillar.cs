@@ -96,7 +96,7 @@ public class Pillar : MonoBehaviour, IPooledObject<Pillar>, IAttachable
         _tileStack.TilesOver += Release;
     }
 
-    private void Unsubscribe() // todo Проверить во всём проекте подписки и отписки на корректность
+    private void Unsubscribe()
     {
         _dragger.PuttedDown -= OnPuttedDown;
         _tileStack.TilesOver -= Release;

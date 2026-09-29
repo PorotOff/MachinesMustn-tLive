@@ -77,4 +77,7 @@ public class CombatSquad
     {
         _combatUnits.RemoveAll(unit => unit.IsDead);
     }
+    // todo Создать анимацию смерти и донастроить аниматор.
+
+    // todo Переназвать конфиг multiple random attack и создать конфиг получения урона (пока самый простой - получил переданный дамаг).
 }
