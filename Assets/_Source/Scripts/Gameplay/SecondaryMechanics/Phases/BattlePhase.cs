@@ -5,11 +5,13 @@ using UnityEngine;
 
 public class BattlePhase : IPhase
 {
+    private PhaseService _phaseService;
+    private List<CombatUnit> _warriors;
+    private List<CombatUnit> _enemies;
+
     private AutoCombatService _autoCombatService;
 
-    public event Action Over;
-
-    public BattlePhase(List<CombatUnit> warriors, List<CombatUnit> enemies, MonoBehaviour monoBehaviour)
+    public BattlePhase(PhaseService phaseService, List<CombatUnit> warriors, List<CombatUnit> enemies, MonoBehaviour monoBehaviour)
     {
         warriors.CastExeption();
         enemies.CastExeption();
@@ -17,9 +19,13 @@ public class BattlePhase : IPhase
         if (monoBehaviour == null)
             throw new ArgumentNullException(nameof(monoBehaviour));
 
+        _phaseService = phaseService;
+        _warriors = warriors;
+        _enemies = enemies;
+
         _autoCombatService = new AutoCombatService(monoBehaviour);
-        AddCombat(warriors, enemies);
-        AddCombat(enemies, warriors);
+        AddCombat(_warriors, _enemies);
+        AddCombat(_enemies, _warriors);
     }
 
     public void Enter()
@@ -45,16 +51,40 @@ public class BattlePhase : IPhase
 
     private void Subscribe()
     {
-        _autoCombatService.CombatOver += InvokeOver;
+        _autoCombatService.CombatOver += OnCombatOver;
+        _autoCombatService.OpponentsDied += OnAnyCombatUnitsDied;
     }
 
     private void Unsubscribe()
     {
-        _autoCombatService.CombatOver -= InvokeOver;
+        _autoCombatService.CombatOver -= OnCombatOver;
+        _autoCombatService.OpponentsDied -= OnAnyCombatUnitsDied;
     }
 
-    private void InvokeOver()
+    private void OnCombatOver()
     {
-        Over?.Invoke();
+        _phaseService.SetPreparePhase();
+    }
+
+    private void OnAnyCombatUnitsDied()
+    {
+        Exit();
+
+        if (IsAllCombatUnitsDead(_warriors))
+        {
+            _phaseService.InvokeWarriorsDied();
+            return;
+        }
+
+        if (IsAllCombatUnitsDead(_enemies))
+        {
+            _phaseService.InvokeEnemiesDied();
+            return;
+        }
+    }
+
+    private bool IsAllCombatUnitsDead(List<CombatUnit> combatUnits)
+    {
+        return combatUnits.All(combatUnit => combatUnit.State is DeadCombatUnitState);
     }
 }

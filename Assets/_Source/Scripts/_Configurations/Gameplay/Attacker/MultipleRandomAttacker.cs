@@ -7,9 +7,11 @@ public class MultipleRandomAttacker : Attacker
 {
     [SerializeField] private int attacksCount;
 
-    protected override void Attack()
+    public override void Attack(CombatUnit attacker, List<CombatUnit> opponents)
     {
-        List<CombatUnit> aliveOpponents = Opponents.Where(opponent => opponent.IsDead == false).ToList();
+        base.Attack(attacker, opponents);
+
+        List<CombatUnit> aliveOpponents = opponents.Where(opponent => opponent.IsDead == false).ToList();
 
         if (aliveOpponents.Count == 0)
             return;
@@ -17,8 +19,8 @@ public class MultipleRandomAttacker : Attacker
         System.Random random = new System.Random();
 
         List<CombatUnit> attackableOpponents = aliveOpponents.OrderBy(opponent => random.Next()).Take(attacksCount).ToList();
-        attackableOpponents.ForEach(opponent => opponent.TakeDamage(CombatUnit.Config.Damage));
+        attackableOpponents.ForEach(opponent => opponent.TakeDamage(attacker.Config.Damage));
 
-        CombatUnit.AttackEnergy.Reduce(CombatUnit.AttackEnergy.EnergyStripeCapacity);
+        attacker.AttackEnergy.Reduce(attacker.AttackEnergy.EnergyStripeCapacity);
     }
 }

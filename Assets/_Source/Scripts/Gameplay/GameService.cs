@@ -6,7 +6,7 @@ public class GameService : MonoBehaviour
 {
     [Header("Prepare phase settings")]
     [SerializeField] private CellField _cellField;
-    [SerializeField, Min(0)] private int _generalPillarsCount;
+    [SerializeField, Min(0)] private int _availableSteps;
     [SerializeField] private PillarBar _pillarBar;
     [SerializeField] private PillarSpawner _pillarSpawner;
     [SerializeField] private List<TileConfig> _tileConfigs;
@@ -23,7 +23,6 @@ public class GameService : MonoBehaviour
     [SerializeField] private CombatField _combatField;
 
     private PhaseService _phaseService;
-    private WarriorChargingService _warriorChargingService;
 
     List<WarriorCombatUnit> _warriors;
     List<EnemyCombatUnit> _enemies;
@@ -38,14 +37,12 @@ public class GameService : MonoBehaviour
 
         _phaseService  = new PhaseService(
             _cellField,
-            _generalPillarsCount,
+            _availableSteps,
             _pillarBar,
             _pillarSpawner,
             _warriors.Select(warrior => warrior as CombatUnit).ToList(),
             _enemies.Select(enemy => enemy as CombatUnit).ToList(),
             this);
-            
-        _warriorChargingService = new WarriorChargingService();
     }
 
     private void Start()
@@ -59,15 +56,12 @@ public class GameService : MonoBehaviour
         _phaseService.EnemiesDied += Win;
         _phaseService.WarriorsDied += Lose;
 
-        _cellField.PillarShuffler.ShuffleOver += OnShuffleOver;
     }
 
     private void OnDisable()
     {
         _phaseService.EnemiesDied -= Win;
         _phaseService.WarriorsDied -= Lose;
-
-        _cellField.PillarShuffler.ShuffleOver -= OnShuffleOver;
     }
 
     private List<T> CreateCombatUnits<T>(CombatUnitRoot combatUnitRootPrefab, List<CombatUnitConfig> combatUnitConfigs) where T : CombatUnit
@@ -91,19 +85,5 @@ public class GameService : MonoBehaviour
     private void Lose()
     {
         Debug.Log("Поражение");
-    }
-
-    private void OnShuffleOver()
-    {
-        List<Pillar> pillars = _cellField.GetPillars().ToList();
-        List<Pillar> fullPillars = pillars.Where(pillar => pillar.TileStack.Count >= Constants.MaxThresholdTilesAtPillar).ToList();
-
-        if (fullPillars.Count != 0)
-        {
-            List<WarriorCombatUnit> aliveWarriors = _warriors.Where(warrior => warrior.IsDead == false).ToList();
-
-            _warriorChargingService.Charge(aliveWarriors, fullPillars);
-            fullPillars.ForEach(pillar => pillar.Release());
-        }
     }
 }

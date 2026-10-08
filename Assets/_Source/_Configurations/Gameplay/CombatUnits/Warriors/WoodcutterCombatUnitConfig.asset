@@ -22,6 +22,7 @@ MonoBehaviour:
   <EnergyStripeCapacity>k__BackingField: 10
   <EnergyStripesCount>k__BackingField: 3
   <Damage>k__BackingField: 20
+  <DamageTaker>k__BackingField: {fileID: 11400000, guid: 09a4a916d7ad3a741866a1bab54f5935, type: 2}
   <AttackSpeed>k__BackingField: 1
   <Attacker>k__BackingField: {fileID: 11400000, guid: 09972e9eaac0dfa42b0f0a5a707521b3, type: 2}
   <View>k__BackingField: {fileID: 2444171397087153127, guid: a805e6ad0b564db479da08490471e96e, type: 3}

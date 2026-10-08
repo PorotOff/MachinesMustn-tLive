@@ -23,16 +23,13 @@ public class CombatUnit : MonoBehaviour, IPooledObject<CombatUnit>, IDamageable,
         View = view;
 
         _attacker = Config.Attacker;
-        _attacker.Initialize(this);
 
         _damageTaker = Config.DamageTaker;
-        _damageTaker.Initialize(this);
 
         Health = new HealthStat(Config.MinHealth, Config.MaxHealth, Config.Health);
         AttackEnergy = new AttackEnergyStat(Config.EnergyStripeCapacity, Config.EnergyStripesCount, Config.MinAttackEnergy, Config.MaxAttackEnergy, Config.AttackEnergy);
 
         SetState(new IdleCombatUnitState(this));
-        Subscribe();
     }
 
     public void Release()
@@ -59,34 +56,7 @@ public class CombatUnit : MonoBehaviour, IPooledObject<CombatUnit>, IDamageable,
     {
         State?.Exit();
         State = state;
+        Debug.Log($"{this}: {nameof(State)} = {State}");
         State.Enter();
-    }
-
-    private void Subscribe()
-    {
-        View.AnimationEvents.TakeDamageAnimationComplete += OnTakeDamageAnimationComplete;
-        View.AnimationEvents.DieAnimationComplete += OnDieAnimationComplete;
-    }
-
-    private void Unsubscribe()
-    {
-        View.AnimationEvents.TakeDamageAnimationComplete -= OnTakeDamageAnimationComplete;
-        View.AnimationEvents.DieAnimationComplete -= OnDieAnimationComplete;
-    }
-
-    private void OnTakeDamageAnimationComplete()
-    {
-        if (Health.Current == 0)
-        {
-            SetState(new DeadCombatUnitState(this));
-            return;
-        }
-
-        SetState(new IdleCombatUnitState(this));
-    }
-
-    private void OnDieAnimationComplete()
-    {
-        Unsubscribe();
     }
 }

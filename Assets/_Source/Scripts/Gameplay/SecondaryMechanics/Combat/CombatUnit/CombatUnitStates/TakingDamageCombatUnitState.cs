@@ -24,9 +24,36 @@ public class TakingDamageCombatUnitState : ICombatUnitState
 
     public void Enter()
     {
-        _damageTaker.TakeDamage(_damage);
-        _combatUnit.View.Animator.SetTakeDamage();
+        Subscribe();
+
+        _damageTaker.TakeDamage(_combatUnit, _damage);
+
+        if (_combatUnit.Health.Current <= 0)
+        {
+            _combatUnit.SetState(new DeadCombatUnitState(_combatUnit));
+            return;
+        }
+
+        _combatUnit.View.Animator.PlayTakeDamage();
     }
 
-    public void Exit() { }
+    public void Exit()
+    {
+        Unsubscribe();
+    }
+
+    private void Subscribe()
+    {
+        _combatUnit.View.AnimationEvents.TakeDamageAnimationComplete += OnTakeDamageAnimationComplete;
+    }
+
+    private void Unsubscribe()
+    {
+        _combatUnit.View.AnimationEvents.TakeDamageAnimationComplete -= OnTakeDamageAnimationComplete;
+    }
+
+    private void OnTakeDamageAnimationComplete()
+    {
+        _combatUnit.SetState(new IdleCombatUnitState(_combatUnit));
+    }
 }

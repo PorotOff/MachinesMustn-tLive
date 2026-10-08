@@ -15,10 +15,10 @@ public class PhaseService
 
     private MonoBehaviour _monoBehaviour;
 
-    private IPhase _currentPhase;
-
     public event Action WarriorsDied;
     public event Action EnemiesDied;
+
+    public IPhase Phase { get; private set; }
 
     public PhaseService(CellField cellField, int availableSteps, PillarBar pillarBar, PillarSpawner pillarSpawner, List<CombatUnit> warriors, List<CombatUnit> enemies, MonoBehaviour monoBehaviour)
     {
@@ -32,59 +32,36 @@ public class PhaseService
 
         _monoBehaviour = monoBehaviour;
 
-        SetPhase(new PreparePhase(_cellField, _availableSteps, _pillarBar, _pillarSpawner));
+        SetPreparePhase();
     }
 
-    private void Subscribe()
+    public void SetPreparePhase()
     {
-        _currentPhase.Over += OnPhaseOver;
+        SetPhase(new PreparePhase(this, _warriors, _cellField, _availableSteps, _pillarBar, _pillarSpawner));
     }
 
-    private void Unsubscribe()
+    public void SetBattlePhase()
     {
-        if (_currentPhase == null)
-            return;
-
-        _currentPhase.Over -= OnPhaseOver;
+        SetPhase(new BattlePhase(this, _warriors, _enemies, _monoBehaviour));
     }
 
-    private void OnPhaseOver()
+    public void InvokeWarriorsDied()
     {
-        if (_currentPhase is BattlePhase)
-        {
-            if (IsAllCombatUnitsDead(_warriors))
-            {
-                WarriorsDied?.Invoke();
-                return;
-            }
+        WarriorsDied?.Invoke();
+    }
 
-            if (IsAllCombatUnitsDead(_enemies))
-            {
-                EnemiesDied?.Invoke();
-                return;
-            }
-
-            SetPhase(new PreparePhase(_cellField, _availableSteps, _pillarBar, _pillarSpawner));
-        }
-        else
-        {
-            SetPhase(new BattlePhase(_warriors, _enemies, _monoBehaviour));
-        }
+    public void InvokeEnemiesDied()
+    {
+        EnemiesDied?.Invoke();
     }
 
     private void SetPhase(IPhase phase)
     {
-        Unsubscribe();
-        _currentPhase?.Exit();
+        Phase?.Exit();
 
-        _currentPhase = phase;
-        
-        Subscribe();
-        _currentPhase.Enter();
-    }
+        Phase = phase;
+        Debug.Log($"{nameof(Phase)} = {Phase}");
 
-    private bool IsAllCombatUnitsDead(List<CombatUnit> combatUnits)
-    {
-        return combatUnits.All(combatUnit => combatUnit.State is DeadCombatUnitState);
+        Phase.Enter();
     }
 }

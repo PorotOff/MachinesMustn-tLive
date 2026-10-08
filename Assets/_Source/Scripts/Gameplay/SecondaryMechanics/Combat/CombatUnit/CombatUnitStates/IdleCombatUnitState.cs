@@ -14,7 +14,7 @@ public class IdleCombatUnitState : ICombatUnitState
 
     public void Enter()
     {
-        _combatUnit.View.Animator.SetIdle();
+        _combatUnit.View.Animator.PlayIdle();
     }
 
     public void Exit() { }

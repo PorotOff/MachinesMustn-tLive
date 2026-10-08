@@ -19,6 +19,7 @@ public class AutoCombatService
     }
 
     public event Action CombatOver;
+    public event Action OpponentsDied;
 
     public void AddCombat(Queue<CombatUnit> attackers, List<CombatUnit> opponents)
     {
@@ -29,27 +30,25 @@ public class AutoCombatService
     {
         Unsubscribe();
 
-        if (_attackersOpponents.Count == 0)
-        {
-            InvokeCombatOver();
-            return;
-        }
-
         var attackersOpponentsPair = _attackersOpponents.First();
         Queue<CombatUnit> attackers = attackersOpponentsPair.Key;
-        List<CombatUnit> opponents = attackersOpponentsPair.Value;
+        List<CombatUnit> opponentns = attackersOpponentsPair.Value;
 
         _attackersOpponents.Remove(attackers);
 
-        _autoCombat = new AutoCombat(attackers, opponents, _monoBehaviour);
+        Queue<CombatUnit> aliveAttackers = new Queue<CombatUnit>(attackers.Where(attacker => attacker.State is not DeadCombatUnitState));
+        List<CombatUnit> aliveOpponents = opponentns.Where(opponent => opponent.State is not DeadCombatUnitState).ToList();
+
+        _autoCombat = new AutoCombat(aliveAttackers, aliveOpponents, _monoBehaviour);
+        _autoCombat.StartCombat();
 
         Subscribe();
     }
 
     private void Subscribe()
     {
-        _autoCombat.CombatOver += StartCombat;
-        _autoCombat.OpponentsDied += InvokeCombatOver;
+        _autoCombat.CombatOver += OnCombatOver;
+        _autoCombat.OpponentsDied += InvokeOpponentsDied;
     }
 
     private void Unsubscribe()
@@ -57,12 +56,25 @@ public class AutoCombatService
         if (_autoCombat == null)
             return;
 
-        _autoCombat.CombatOver -= StartCombat;
-        _autoCombat.OpponentsDied -= InvokeCombatOver;
+        _autoCombat.CombatOver -= OnCombatOver;
+        _autoCombat.OpponentsDied -= InvokeOpponentsDied;
     }
 
-    private void InvokeCombatOver()
+    private void OnCombatOver()
     {
-        CombatOver?.Invoke();
+        if (_attackersOpponents.Count == 0)
+        {
+            Unsubscribe();
+            CombatOver?.Invoke();
+            
+            return;
+        }
+
+        StartCombat();
+    }
+
+    private void InvokeOpponentsDied()
+    {
+        OpponentsDied?.Invoke();
     }
 }

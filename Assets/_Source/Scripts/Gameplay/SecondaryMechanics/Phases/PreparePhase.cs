@@ -1,17 +1,24 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 public class PreparePhase : IPhase
 {
+    private PhaseService _phaseService;
+    private List<CombatUnit> _warriors;
     private CellField _cellField;
     private int _availableSteps;
     private PillarBar _pillarBar;
     private PillarSpawner _pillarSpawner;
 
+    private CombatUnitChargingService _combatUnitChargingService = new CombatUnitChargingService();
     private int _remainingSteps;
     private int _takenSteps;
 
-    public PreparePhase(CellField cellField, int availableSteps, PillarBar pillarBar, PillarSpawner pillarSpawner)
+    public PreparePhase(PhaseService phaseService, List<CombatUnit> warriors, CellField cellField, int availableSteps, PillarBar pillarBar, PillarSpawner pillarSpawner)
     {
+        _phaseService = phaseService;
+        _warriors = warriors;
         _cellField = cellField;
         _availableSteps = availableSteps;
         _pillarBar = pillarBar;
@@ -19,8 +26,6 @@ public class PreparePhase : IPhase
 
         Subscribe();
     }
-
-    public event Action Over;
 
     public void Enter()
     {
@@ -52,14 +57,29 @@ public class PreparePhase : IPhase
 
     private void OnShuffleOver()
     {
+        ChargeWarriors();
+
         if (_takenSteps == _availableSteps)
         {
             _cellField.Clear();
-            Over?.Invoke();
+            _phaseService.SetBattlePhase();
+            return;
         }
-        else
+        
+        SpawnPillars();
+    }
+
+    private void ChargeWarriors()
+    {
+        List<Pillar> pillars = _cellField.GetPillars().ToList();
+        List<Pillar> fullPillars = pillars.Where(pillar => pillar.TileStack.Count >= Constants.MaxThresholdTilesAtPillar).ToList();
+
+        if (fullPillars.Count != 0)
         {
-            SpawnPillars();
+            List<CombatUnit> aliveWarriors = _warriors.Where(warrior => warrior.IsDead == false).ToList();
+
+            _combatUnitChargingService.Charge(aliveWarriors, fullPillars);
+            fullPillars.ForEach(pillar => pillar.Release());
         }
     }
 

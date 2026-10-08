@@ -15,22 +15,22 @@ public class CombatUnitAnimator : MonoBehaviour
         _animator = GetComponent<Animator>();
     }
 
-    public void SetIdle()
+    public void PlayIdle()
     {
         _animator.SetTrigger(Idle);
     }
 
-    public void SetAttack()
+    public void PlayAttack()
     {
         _animator.SetTrigger(Attack);
     }
 
-    public void SetTakeDamage()
+    public void PlayTakeDamage()
     {
         _animator.SetTrigger(TakeDamage);
     }
 
-    public void SetDie()
+    public void PlayDie()
     {
         _animator.SetTrigger(Die);
     }

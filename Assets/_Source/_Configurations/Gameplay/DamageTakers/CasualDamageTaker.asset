@@ -9,7 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c77f6322cfe246d419733e6594b1c91d, type: 3}
-  m_Name: DoubleRandomAttacker
+  m_Script: {fileID: 11500000, guid: f93a01e4873c2a746a9046b479fdb1c0, type: 3}
+  m_Name: CasualDamageTaker
   m_EditorClassIdentifier: 
-  attacksCount: 2

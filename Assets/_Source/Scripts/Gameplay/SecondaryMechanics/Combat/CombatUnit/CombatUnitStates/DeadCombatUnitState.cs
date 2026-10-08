@@ -14,7 +14,7 @@ public class DeadCombatUnitState : ICombatUnitState
 
     public void Enter()
     {
-        _combatUnit.View.Animator.SetIdle();
+        _combatUnit.View.Animator.PlayDie();
     }
 
     public void Exit() { }

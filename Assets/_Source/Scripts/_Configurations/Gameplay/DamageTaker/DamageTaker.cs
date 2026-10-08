@@ -1,19 +1,13 @@
 using System;
+using UnityEngine;
 
-public abstract class DamageTaker
+public abstract class DamageTaker : ScriptableObject
 {
-    protected CombatUnit CombatUnit { get; private set; }
-
-    public void Initialize(CombatUnit unit)
+    public virtual void TakeDamage(CombatUnit damageTaker, int damage)
     {
-        if (unit == null)
-            throw new ArgumentNullException(nameof(unit));
-            
-        CombatUnit = unit;
-    }
+        if (damageTaker == null)
+            throw new ArgumentNullException(nameof(damageTaker));
 
-    public virtual void TakeDamage(int damage)
-    {
         if (damage < 0)
             throw new InvalidOperationException(nameof(damage));
     }

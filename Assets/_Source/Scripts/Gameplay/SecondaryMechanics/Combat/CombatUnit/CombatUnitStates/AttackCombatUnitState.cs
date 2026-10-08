@@ -27,7 +27,7 @@ public class AttackCombatUnitState : ICombatUnitState
     public void Enter()
     {
         Subscribe();
-        Attack();
+        _combatUnit.View.Animator.PlayAttack();
     }
 
     public void Exit()
@@ -37,43 +37,41 @@ public class AttackCombatUnitState : ICombatUnitState
 
     private void Subscribe()
     {
+        _combatUnit.View.AnimationEvents.Attacked += OnAttacked;
+
         foreach (var opponent in _opponents)
         {
-            opponent.View.AnimationEvents.TakeDamageAnimationComplete += OnOpponentTakeDamageAnimationComplete;
+            opponent.View.AnimationEvents.TakeDamageAnimationComplete += Attack;
+            opponent.View.AnimationEvents.DieAnimationComplete += Attack;
         }
     }
 
     private void Unsubscribe()
     {
+        _combatUnit.View.AnimationEvents.Attacked -= OnAttacked;
+
         foreach (var opponent in _opponents)
         {
-            opponent.View.AnimationEvents.TakeDamageAnimationComplete -= OnOpponentTakeDamageAnimationComplete;
+            opponent.View.AnimationEvents.TakeDamageAnimationComplete -= Attack;
+            opponent.View.AnimationEvents.DieAnimationComplete -= Attack;
         }
     }
 
-    private void OnOpponentTakeDamageAnimationComplete()
+    private void OnAttacked()
     {
-        if (IsAllOpponentsIdle() == false)
-            return;
-
-        Attack();
+        List<CombatUnit> aliveOpponents = _opponents.Where(opponent => opponent.State is not DeadCombatUnitState).ToList();
+        _attacker.Attack(_combatUnit, aliveOpponents);
     }
 
     private void Attack()
     {
-        if (_combatUnit.AttackEnergy.AvailableAttacks == 0)
+        if (HasAliveOpponents() == false || _combatUnit.AttackEnergy.AvailableAttacks == 0)
         {
             SetIdleCombatUnitState();
             return;
         }
 
-        if (TryGetAliveOpponents(out List<CombatUnit> aliveOpponents) == false)
-        {
-            SetIdleCombatUnitState();
-            return;
-        }
-
-        _attacker.Attack(aliveOpponents);
+        _combatUnit.View.Animator.PlayAttack();
     }
 
     private void SetIdleCombatUnitState()
@@ -81,23 +79,8 @@ public class AttackCombatUnitState : ICombatUnitState
         _combatUnit.SetState(new IdleCombatUnitState(_combatUnit));
     }
 
-    private bool TryGetAliveOpponents(out List<CombatUnit> aliveOpponents)
+    private bool HasAliveOpponents()
     {
-        aliveOpponents = _opponents.Where(opponent => opponent.IsDead == false).ToList();
-
-        if (aliveOpponents.Count > 0)
-            return true;
-
-        return false;
-    }
-
-    private bool IsAllOpponentsIdle()
-    {
-        bool hasNotIdleOpponent = _opponents.FirstOrDefault(opponent => opponent.State is not IdleCombatUnitState);
-
-        if (hasNotIdleOpponent)
-            return false;
-
-        return true;
+        return _opponents.Any(opponent => opponent.State is not DeadCombatUnitState);
     }
 }
