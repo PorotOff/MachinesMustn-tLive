@@ -72,7 +72,7 @@ public class PreparePhase : IPhase
     private void ChargeWarriors()
     {
         List<Pillar> pillars = _cellField.GetPillars().ToList();
-        List<Pillar> fullPillars = pillars.Where(pillar => pillar.TileStack.Count >= Constants.MaxThresholdTilesAtPillar).ToList();
+        List<Pillar> fullPillars = pillars.Where(pillar => pillar.TileStack.Count >= Constants.TilesThreshohldAtPillar).ToList();
 
         if (fullPillars.Count != 0)
         {

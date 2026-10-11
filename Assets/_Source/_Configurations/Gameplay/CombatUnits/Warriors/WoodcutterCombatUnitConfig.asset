@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d864d18c08c99ae4d958ec08da881b58, type: 3}
+  m_Script: {fileID: 11500000, guid: 0d418c9d9df6943489acdf9fdf6695a5, type: 3}
   m_Name: WoodcutterCombatUnitConfig
   m_EditorClassIdentifier: 
   <ID>k__BackingField: 0
@@ -23,7 +23,6 @@ MonoBehaviour:
   <EnergyStripesCount>k__BackingField: 3
   <Damage>k__BackingField: 20
   <DamageTaker>k__BackingField: {fileID: 11400000, guid: 09a4a916d7ad3a741866a1bab54f5935, type: 2}
-  <AttackSpeed>k__BackingField: 1
+  <AttackSpeed>k__BackingField: 5
   <Attacker>k__BackingField: {fileID: 11400000, guid: 09972e9eaac0dfa42b0f0a5a707521b3, type: 2}
   <View>k__BackingField: {fileID: 2444171397087153127, guid: a805e6ad0b564db479da08490471e96e, type: 3}
-  <DoubleAttackChance>k__BackingField: 20

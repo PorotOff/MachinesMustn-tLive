@@ -19,7 +19,6 @@ public class CombatUnitAnimationEvents : MonoBehaviour
 
     public void InvokeDieAnimationComplete()
     {
-        Debug.Log("Die");
         DieAnimationComplete?.Invoke();
     }
 }

@@ -13,6 +13,16 @@ public class Dragger : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
     public event Action<IAttachmentPoint> PuttedDown;
 
     private RaycastComponentDetector<IAttachmentPoint> _attachmentPointDetector;
+    private bool _pickedUp;
+    private Vector2 _pointerPosition;
+
+    private void Update()
+    {
+        if (_pickedUp)
+        {
+            MoveAtPointerPosition(_pointerPosition);
+        }
+    }
 
     public void Initialize(Transform transform)
     {
@@ -24,17 +34,22 @@ public class Dragger : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
     {
         MoveAtPointerPosition(eventData.position);
         PickedUp?.Invoke();
+
+        _pointerPosition = eventData.position;
+        _pickedUp = true;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
         _attachmentPointDetector.TryDetect(out IAttachmentPoint attachmentPoint);
         PuttedDown?.Invoke(attachmentPoint);
+
+        _pickedUp = false;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        MoveAtPointerPosition(eventData.position);
+        _pointerPosition = eventData.position;
     }
 
     private void MoveAtPointerPosition(Vector2 pointerPosition)
@@ -42,8 +57,6 @@ public class Dragger : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
         Vector3 dragPosition = Camera.main.ScreenToWorldPoint(pointerPosition);
         dragPosition.z = _transform.position.z;
 
-        _transform.position = dragPosition;     
+        _transform.position = Vector3.Lerp(_transform.position, dragPosition, Constants.DragInterpolationStep);
     }
-
-    // todo Прикрутить Lerp для плавного следования за курсором.
 }

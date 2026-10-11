@@ -36,7 +36,7 @@ public class PillarSpawner : Spawner<Pillar>
 
         for (int i = 0; i < count; i++)
         {
-            int generalTilesCount = UnityEngine.Random.Range(Constants.MinTilesCountAtPillar, Constants.MaxTilesCountAtPillar + 1);
+            int generalTilesCount = UnityEngine.Random.Range(Constants.MinTilesCountAtSpawnablePillar, Constants.MaxTilesCountAtSpawnablePillar + 1);
             int finalTileConfigsCount = GetTileConfigsCount(generalTilesCount);
 
             List<TileConfig> tileConfigs = GetRandomTileConfigs(_tileConfigs, finalTileConfigsCount);
@@ -54,7 +54,7 @@ public class PillarSpawner : Spawner<Pillar>
     private int GetTileConfigsCount(int tilesCount)
     {
         int minTileConfigsCount = 1;
-        Dictionary<int, int> chancesCounts = _chanceWeighter.GetChances(minTileConfigsCount, _tileConfigs.Count, Constants.MinTilesCountAtPillar, Constants.MaxTilesCountAtPillar, tilesCount);
+        Dictionary<int, int> chancesCounts = _chanceWeighter.GetChances(minTileConfigsCount, _tileConfigs.Count, Constants.MinTilesCountAtSpawnablePillar, Constants.MaxTilesCountAtSpawnablePillar, tilesCount);
         int randomChance = UnityEngine.Random.Range(0, 100 + 1);
 
         foreach (var chance in chancesCounts.Keys)

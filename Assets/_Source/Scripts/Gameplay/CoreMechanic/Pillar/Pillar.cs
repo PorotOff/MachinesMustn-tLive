@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider2D))]
 [RequireComponent(typeof(Dragger))]
 public class Pillar : MonoBehaviour, IPooledObject<Pillar>, IAttachable
 {
+    [SerializeField] private Transform _tilesContainer;
+    [SerializeField] private TMP_Text _tilesCounter;
+
     private Transform _transform;
     private BoxCollider2D _boxCollider;
     private Dragger _dragger;
@@ -33,13 +37,20 @@ public class Pillar : MonoBehaviour, IPooledObject<Pillar>, IAttachable
 
         _dragger.Initialize(_transform);
         _boxColliderTransformer.SetScaleAndOffset(_tileStack.GeneralBounds);
+
+        UpdateTilesCounter(_tileStack.Peek().AttachPosition);
+
         Subscribe();
     }
 
     public void AddTile(Tile tile)
     {
-        tile.StackTo(_transform, _tileStack.Peek().AttachPosition);
+        Vector3 newAttachPosition = _tileStack.Peek().AttachPosition;
+        
+        tile.StackTo(_tilesContainer, newAttachPosition);
         _tileStack.Add(tile);
+        
+        UpdateTilesCounter(newAttachPosition);
     }
 
     public Tile PopTile()
@@ -111,5 +122,11 @@ public class Pillar : MonoBehaviour, IPooledObject<Pillar>, IAttachable
         }
         
         Attach(attachablePoint);
+    }
+
+    private void UpdateTilesCounter(Vector3 newPosition)
+    {
+        _tilesCounter.text = $"{_tileStack.Count}";
+        _tilesCounter.transform.position = newPosition;
     }
 }   
