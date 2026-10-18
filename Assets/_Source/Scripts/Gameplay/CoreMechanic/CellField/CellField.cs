@@ -5,6 +5,8 @@ using UnityEngine;
 public class CellField : MonoBehaviour
 {
     [SerializeField] private Cell[] _cells;
+    [SerializeField] private float _shuffleInterval; // temp: вынести из этого класса _pillarShuffler и _shuffleInterval соответственно тоже.
+    // Это не его ответственность.
 
     private PillarShuffler _pillarShuffler;
     
@@ -32,7 +34,7 @@ public class CellField : MonoBehaviour
 
     public void Initialize()
     {
-        _pillarShuffler = new PillarShuffler(_cells);
+        _pillarShuffler = new PillarShuffler(_cells, _shuffleInterval, this);
     }
 
     public Pillar[] GetPillars()

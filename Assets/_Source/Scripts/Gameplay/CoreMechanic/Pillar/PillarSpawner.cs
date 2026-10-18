@@ -43,7 +43,6 @@ public class PillarSpawner : Spawner<Pillar>
             List<Tile> tiles = SpawnTiles(generalTilesCount, tileConfigs);
 
             Pillar pillar = Spawn();
-            StackTilesToPillar(pillar, tiles);
             pillar.Initialize(tiles.ToList());
             pillars[i] = pillar;
         }
@@ -68,17 +67,6 @@ public class PillarSpawner : Spawner<Pillar>
 
     private List<TileConfig> GetRandomTileConfigs(List<TileConfig> tileConfigs, int count)
     {
-        #region Preconditions
-            if (tileConfigs == null)
-                throw new NullReferenceException(nameof(tileConfigs));
-    
-            if (tileConfigs.Count <= 0)
-                throw new IndexOutOfRangeException(nameof(tileConfigs));
-
-            if (count > tileConfigs.Count)
-                throw new InvalidOperationException();
-        #endregion
-
         List<TileConfig> randomTileConfigs = new List<TileConfig>(tileConfigs);
 
         while (randomTileConfigs.Count > count)
@@ -92,14 +80,6 @@ public class PillarSpawner : Spawner<Pillar>
 
     private List<Tile> SpawnTiles(int count, List<TileConfig> tileConfigs)
     {
-        #region Preconditions
-            if (tileConfigs == null)
-                throw new NullReferenceException(nameof(tileConfigs));
-    
-            if (tileConfigs.Count <= 0)
-                throw new IndexOutOfRangeException(nameof(tileConfigs));
-        #endregion
-
         List<Tile> spawnedTiles = new List<Tile>();
         List<TileConfig> avaliableTileConfigs = new List<TileConfig>(tileConfigs);
         int tileStacksCount = avaliableTileConfigs.Count;
@@ -124,41 +104,9 @@ public class PillarSpawner : Spawner<Pillar>
 
     private TileConfig PopRandomTileConfig(List<TileConfig> tileConfigs)
     {
-        #region Preconditions
-            if (tileConfigs == null)
-                throw new NullReferenceException(nameof(tileConfigs));
-    
-            if (tileConfigs.Count <= 0)
-                throw new IndexOutOfRangeException(nameof(tileConfigs));
-        #endregion
-
         TileConfig tileConfig = tileConfigs[UnityEngine.Random.Range(0, tileConfigs.Count)];
         tileConfigs.Remove(tileConfig);
 
         return tileConfig;
-    }
-
-    private void StackTilesToPillar(Pillar pillar, List<Tile> tiles)
-    {
-        #region Preconditions
-            if (pillar == null)
-                throw new NullReferenceException(nameof(tiles));
-
-            if (tiles == null)
-                throw new NullReferenceException(nameof(tiles));
-    
-            if (tiles.Count <= 0)
-                throw new IndexOutOfRangeException(nameof(tiles));
-        #endregion
-
-        int tileIndex = 0;
-        tiles[0].StackTo(pillar.transform, pillar.transform.position);
-        tileIndex++;
-
-        for (int i = tileIndex; i < tiles.Count; i++)
-        {
-            Vector3 previousTileAttachPosition = tiles[i - 1].AttachPosition;
-            tiles[i].StackTo(pillar.transform, previousTileAttachPosition);
-        }
     }
 }

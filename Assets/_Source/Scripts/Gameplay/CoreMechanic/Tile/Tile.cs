@@ -5,9 +5,12 @@ using UnityEngine;
 public class Tile : MonoBehaviour, IPooledObject<Tile>
 {
     [SerializeField] private Transform _anchor;
-
-    private Transform _transform;
+    [SerializeField] private float _flightHeight = 5f; // temp: Вынести это и поле ниже в отдельный конфиг.
+    [SerializeField] private float _flightDuration = 1f;
+    
     private SpriteRenderer _spriteRenderer;
+
+    private FlightAnimation _flightAnimation = new FlightAnimation();
 
     public event Action<Tile> Released;
 
@@ -19,10 +22,8 @@ public class Tile : MonoBehaviour, IPooledObject<Tile>
     {
         Config = tileConfig;
 
-        _transform = transform;
         _spriteRenderer = GetComponent<SpriteRenderer>();
-
-        ApplyConfig();
+        _spriteRenderer.color = Config.Color;
     }
 
     public void Release()
@@ -32,12 +33,13 @@ public class Tile : MonoBehaviour, IPooledObject<Tile>
 
     public void StackTo(Transform parent, Vector3 attachPosition)
     {
-        transform.SetParent(parent);
-        _transform.position = attachPosition;
+        transform.SetParent(parent); 
+        transform.position = attachPosition;
     }
 
-    private void ApplyConfig()
+    public void FlyTo(Transform parent, Vector3 attachPosition)
     {
-        _spriteRenderer.color = Config.Color;
+        transform.SetParent(parent);
+        _flightAnimation.Fly(transform, attachPosition, _flightHeight, _flightDuration);
     }
 }

@@ -5,12 +5,7 @@ using UnityEngine;
 
 public class TileStack : IReadOnlyTileStack
 {
-    private List<Tile> _tiles;
-
-    public TileStack(List<Tile> tiles)
-    {
-        _tiles = tiles;
-    }
+    private List<Tile> _tiles = new List<Tile>();
 
     public event Action TilesOver;
 

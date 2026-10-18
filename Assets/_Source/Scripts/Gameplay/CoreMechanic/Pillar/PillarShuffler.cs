@@ -1,14 +1,22 @@
 using System;
+using System.Collections;
+using UnityEngine;
 
 public class PillarShuffler : IReadOnlyPillarShuffler
 {
     private PillarFinder _pillarFinder;
+    private float _shuffleInterval;
+    private MonoBehaviour _monoBehaviour;
+
+    private Coroutine _coroutine;
     
     public event Action ShuffleOver;
 
-    public PillarShuffler(Cell[] cells)
+    public PillarShuffler(Cell[] cells, float shuffleInterval, MonoBehaviour monoBehaviour)
     {
         _pillarFinder = new PillarFinder(cells);
+        _shuffleInterval = shuffleInterval;
+        _monoBehaviour = monoBehaviour;
     }
 
     public void Shuffle(Pillar pillar)
@@ -19,8 +27,8 @@ public class PillarShuffler : IReadOnlyPillarShuffler
             {
                 if (_pillarFinder.TryFindMonotypicPillar(pillar, out Pillar monotypicPillar) == false)
                     return;
-
-                ShuffleTiles(monotypicPillar, pillar);
+                
+                _coroutine = _monoBehaviour.StartCoroutine(ShuffleTiles(monotypicPillar, pillar));
             }
             else
             {
@@ -44,8 +52,8 @@ public class PillarShuffler : IReadOnlyPillarShuffler
         if (_pillarFinder.TryFindMonotypicPillar(firstMonotypicPillar, out Pillar secondMonotypicPillar) == false)
             return false;
 
-        ShuffleTiles(firstMonotypicPillar, pillar);
-        ShuffleTiles(pillar, secondMonotypicPillar);
+        _coroutine = _monoBehaviour.StartCoroutine(ShuffleTiles(firstMonotypicPillar, pillar)); // bug: Тут нужно учитывать время шафла тайлов
+        _coroutine = _monoBehaviour.StartCoroutine(ShuffleTiles(pillar, secondMonotypicPillar));
         
         return true;
     }
@@ -57,20 +65,23 @@ public class PillarShuffler : IReadOnlyPillarShuffler
             if (_pillarFinder.TryFindMonotypicPillar(pillar, out Pillar monotypicPillar) == false)
                 return;
 
-            ShuffleTiles(pillar, monotypicPillar);
+            _coroutine = _monoBehaviour.StartCoroutine(ShuffleTiles(pillar, monotypicPillar));
         }
     }
 
-    private void ShuffleTiles(Pillar pillarGiver, Pillar pillarTaker)
+    private IEnumerator ShuffleTiles(Pillar pillarGiver, Pillar pillarTaker)
     {
+        var wait = new WaitForSecondsRealtime(_shuffleInterval);
         int tilesCount = pillarGiver.TileStack.Count;
 
         for (int i = 0; i < tilesCount; i++)
         {
             if (pillarGiver.TileStack.TopTile.Config.ID != pillarTaker.TileStack.TopTile.Config.ID)
-                return;
+                yield break;
 
             pillarTaker.AddTile(pillarGiver.PopTile());
+
+            yield return wait;
         }
     }
 }

@@ -32,7 +32,11 @@ public class Pillar : MonoBehaviour, IPooledObject<Pillar>, IAttachable
 
     public void Initialize(List<Tile> tiles)
     {
-        _tileStack = new TileStack(tiles);
+        tiles.CastExeption();
+
+        _tileStack = new TileStack();
+        StackInitializedTiles(tiles);
+        
         _boxColliderTransformer = new BoxColliderTransformer(_boxCollider, _transform);
 
         _dragger.Initialize(_transform);
@@ -47,9 +51,9 @@ public class Pillar : MonoBehaviour, IPooledObject<Pillar>, IAttachable
     {
         Vector3 newAttachPosition = _tileStack.Peek().AttachPosition;
         
-        tile.StackTo(_tilesContainer, newAttachPosition);
         _tileStack.Add(tile);
         
+        tile.FlyTo(_tilesContainer, newAttachPosition);
         UpdateTilesCounter(newAttachPosition);
     }
 
@@ -122,6 +126,22 @@ public class Pillar : MonoBehaviour, IPooledObject<Pillar>, IAttachable
         }
         
         Attach(attachablePoint);
+    }
+
+    private void StackInitializedTiles(List<Tile> tiles)
+    {
+        Tile firstTile = tiles[0];
+
+        _tileStack.Add(firstTile);
+        firstTile.StackTo(_tilesContainer, transform.position);
+
+        for (int i = 1; i < tiles.Count; i++)
+        {
+            Tile tile = tiles[i];
+
+            tile.StackTo(_tilesContainer, _tileStack.Peek().AttachPosition);
+            _tileStack.Add(tile);
+        }
     }
 
     private void UpdateTilesCounter(Vector3 newPosition)
