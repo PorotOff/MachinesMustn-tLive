@@ -12,7 +12,7 @@ public class CombatSquad
 
     public CombatSquad(List<CombatUnit> combatUnits)
     {
-        combatUnits.CastExeption();
+        combatUnits.CastException();
         _combatUnits = combatUnits;
 
         OrderByDescending();

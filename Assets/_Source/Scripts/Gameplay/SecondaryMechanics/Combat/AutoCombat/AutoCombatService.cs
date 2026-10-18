@@ -1,21 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 public class AutoCombatService
 {
-    private MonoBehaviour _monoBehaviour;
+    private CoroutineService _coroutineService;
 
     private AutoCombat _autoCombat;
     private Dictionary<Queue<CombatUnit>, List<CombatUnit>> _attackersOpponents = new Dictionary<Queue<CombatUnit>, List<CombatUnit>>();
 
-    public AutoCombatService(MonoBehaviour monoBehaviour)
+    public AutoCombatService(CoroutineService coroutineService)
     {
-        if (monoBehaviour == null)
-            throw new ArgumentNullException(nameof(monoBehaviour));
-
-        _monoBehaviour = monoBehaviour;
+        _coroutineService = coroutineService;
     }
 
     public event Action CombatOver;
@@ -39,7 +35,7 @@ public class AutoCombatService
         Queue<CombatUnit> aliveAttackers = new Queue<CombatUnit>(attackers.Where(attacker => attacker.State is not DeadCombatUnitState));
         List<CombatUnit> aliveOpponents = opponentns.Where(opponent => opponent.State is not DeadCombatUnitState).ToList();
 
-        _autoCombat = new AutoCombat(aliveAttackers, aliveOpponents, _monoBehaviour);
+        _autoCombat = new AutoCombat(aliveAttackers, aliveOpponents, _coroutineService);
         _autoCombat.StartCombat();
 
         Subscribe();

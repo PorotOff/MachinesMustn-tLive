@@ -4,12 +4,12 @@ using UnityEngine;
 
 public abstract class Attacker : ScriptableObject
 {
-    public virtual void Attack(CombatUnit attacker,List<CombatUnit> opponents)
+    public virtual void Attack(CombatUnit attacker, List<CombatUnit> opponents)
     {
         if (attacker == null)
             throw new ArgumentNullException(nameof(attacker));
             
-        opponents.CastExeption();
+        opponents.CastException();
 
         foreach (var opponent in opponents)
         {

@@ -31,8 +31,7 @@ public class GameService : MonoBehaviour
     {
         _warriors = CreateCombatUnits<WarriorCombatUnit>(_warriorRootPrefab, _warriorConfigs);
         _enemies = CreateCombatUnits<EnemyCombatUnit>(_enemyRootPrefab, _enemieyConfigs);
-
-        _cellField.Initialize();
+        
         _pillarSpawner.Initialize(_tileConfigs);
 
         _phaseService  = new PhaseService(

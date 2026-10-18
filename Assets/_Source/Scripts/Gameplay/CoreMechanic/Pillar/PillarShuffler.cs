@@ -6,17 +6,17 @@ public class PillarShuffler : IReadOnlyPillarShuffler
 {
     private PillarFinder _pillarFinder;
     private float _shuffleInterval;
-    private MonoBehaviour _monoBehaviour;
+    private CoroutineService _coroutineService;
 
     private Coroutine _coroutine;
     
     public event Action ShuffleOver;
 
-    public PillarShuffler(Cell[] cells, float shuffleInterval, MonoBehaviour monoBehaviour)
+    public PillarShuffler(Cell[] cells, float shuffleInterval, CoroutineService coroutineService)
     {
         _pillarFinder = new PillarFinder(cells);
         _shuffleInterval = shuffleInterval;
-        _monoBehaviour = monoBehaviour;
+        _coroutineService = coroutineService;
     }
 
     public void Shuffle(Pillar pillar)
@@ -28,7 +28,7 @@ public class PillarShuffler : IReadOnlyPillarShuffler
                 if (_pillarFinder.TryFindMonotypicPillar(pillar, out Pillar monotypicPillar) == false)
                     return;
                 
-                _coroutine = _monoBehaviour.StartCoroutine(ShuffleTiles(monotypicPillar, pillar));
+                _coroutine = _coroutineService.StartCoroutine(ShuffleTiles(monotypicPillar, pillar));
             }
             else
             {
@@ -52,8 +52,8 @@ public class PillarShuffler : IReadOnlyPillarShuffler
         if (_pillarFinder.TryFindMonotypicPillar(firstMonotypicPillar, out Pillar secondMonotypicPillar) == false)
             return false;
 
-        _coroutine = _monoBehaviour.StartCoroutine(ShuffleTiles(firstMonotypicPillar, pillar)); // bug: Тут нужно учитывать время шафла тайлов
-        _coroutine = _monoBehaviour.StartCoroutine(ShuffleTiles(pillar, secondMonotypicPillar));
+        _coroutine = _coroutineService.StartCoroutine(ShuffleTiles(firstMonotypicPillar, pillar)); // bug: Тут нужно учитывать время шафла тайлов
+        _coroutine = _coroutineService.StartCoroutine(ShuffleTiles(pillar, secondMonotypicPillar));
         
         return true;
     }
@@ -65,7 +65,7 @@ public class PillarShuffler : IReadOnlyPillarShuffler
             if (_pillarFinder.TryFindMonotypicPillar(pillar, out Pillar monotypicPillar) == false)
                 return;
 
-            _coroutine = _monoBehaviour.StartCoroutine(ShuffleTiles(pillar, monotypicPillar));
+            _coroutine = _coroutineService.StartCoroutine(ShuffleTiles(pillar, monotypicPillar));
         }
     }
 

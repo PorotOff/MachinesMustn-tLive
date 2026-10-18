@@ -32,7 +32,7 @@ public class Pillar : MonoBehaviour, IPooledObject<Pillar>, IAttachable
 
     public void Initialize(List<Tile> tiles)
     {
-        tiles.CastExeption();
+        tiles.CastException();
 
         _tileStack = new TileStack();
         StackInitializedTiles(tiles);

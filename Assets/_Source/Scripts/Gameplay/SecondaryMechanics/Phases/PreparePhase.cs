@@ -1,35 +1,47 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 public class PreparePhase : IPhase
 {
     private PhaseService _phaseService;
-    private List<CombatUnit> _warriors;
+    private CombatUnitRepository _combatUnitRepository;
+
     private CellField _cellField;
-    private int _availableSteps;
+    private IReadOnlyPillarShuffler _pillarShuffler;
+    private CombatUnitChargingService _combatUnitChargingService;
+
+    private PreparePhaseConfig _preparePhaseConfig;
     private PillarBar _pillarBar;
     private PillarSpawner _pillarSpawner;
 
-    private CombatUnitChargingService _combatUnitChargingService = new CombatUnitChargingService();
     private int _remainingSteps;
     private int _takenSteps;
 
-    public PreparePhase(PhaseService phaseService, List<CombatUnit> warriors, CellField cellField, int availableSteps, PillarBar pillarBar, PillarSpawner pillarSpawner)
+    public PreparePhase
+    (
+        PhaseService phaseService,
+        CombatUnitRepository combatUnitRepository,
+        CellField cellField,
+        IReadOnlyPillarShuffler pillarShuffler,
+        CombatUnitChargingService combatUnitChargingService,
+        PreparePhaseConfig preparePhaseConfig,
+        PillarBar pillarBar,
+        PillarSpawner pillarSpawner
+    )
     {
         _phaseService = phaseService;
-        _warriors = warriors;
+        _combatUnitRepository = combatUnitRepository;
         _cellField = cellField;
-        _availableSteps = availableSteps;
+        _pillarShuffler = pillarShuffler;
+        _combatUnitChargingService = combatUnitChargingService;
+        _preparePhaseConfig = preparePhaseConfig;
         _pillarBar = pillarBar;
         _pillarSpawner = pillarSpawner;
 
-        Subscribe();
+        _remainingSteps = _preparePhaseConfig.AvailableSteps;
+        _takenSteps = 0;
     }
 
     public void Enter()
     {
-        _remainingSteps = _availableSteps;
+        Subscribe();
         SpawnPillars();
     }
 
@@ -41,46 +53,32 @@ public class PreparePhase : IPhase
     private void Subscribe()
     {
         _cellField.CellOcupied += OnCellOcupied;
-        _cellField.PillarShuffler.ShuffleOver += OnShuffleOver;
+        _pillarShuffler.ShuffleOver += OnShuffleOver;
     }
 
     private void Unsubscribe()
     {
         _cellField.CellOcupied -= OnCellOcupied;
-        _cellField.PillarShuffler.ShuffleOver -= OnShuffleOver;
+        _pillarShuffler.ShuffleOver -= OnShuffleOver;
     }
 
-    private void OnCellOcupied()
+    private void OnCellOcupied(IAttachable attachable)
     {
         _takenSteps++;
     }
 
     private void OnShuffleOver()
     {
-        ChargeWarriors();
+        _combatUnitChargingService.Charge(_combatUnitRepository.Warriors, _cellField.GetPillars());
 
-        if (_takenSteps == _availableSteps)
+        if (_takenSteps == _preparePhaseConfig.AvailableSteps)
         {
             _cellField.Clear();
             _phaseService.SetBattlePhase();
             return;
         }
-        
+
         SpawnPillars();
-    }
-
-    private void ChargeWarriors()
-    {
-        List<Pillar> pillars = _cellField.GetPillars().ToList();
-        List<Pillar> fullPillars = pillars.Where(pillar => pillar.TileStack.Count >= Constants.TilesThreshohldAtPillar).ToList();
-
-        if (fullPillars.Count != 0)
-        {
-            List<CombatUnit> aliveWarriors = _warriors.Where(warrior => warrior.IsDead == false).ToList();
-
-            _combatUnitChargingService.Charge(aliveWarriors, fullPillars);
-            fullPillars.ForEach(pillar => pillar.Release());
-        }
     }
 
     private void SpawnPillars()

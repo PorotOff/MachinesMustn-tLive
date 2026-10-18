@@ -17,7 +17,7 @@ public class AttackCombatUnitState : ICombatUnitState
         if (attacker == null)
             throw new ArgumentNullException(nameof(attacker));
 
-        opponents.CastExeption();
+        opponents.CastException();
 
         _combatUnit = combatUnit;
         _attacker = attacker;
